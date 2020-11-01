@@ -1,0 +1,32 @@
+var RandomizedSet = function(){
+    this.set = [];//原型对象上的数组
+    this.setMap = {};//一个hash表，key为具体元素，value为该元素的下标
+}
+
+Randomized.prototype.insert = function(val){
+   if(typeof(this.setMap(val)) !== "undefined"){
+       return false;
+   }
+   this.setMap[val] = this.set.length;
+   this.set.push(val);
+   return true;
+}
+
+Randomized.prototype.remove = function(val){
+   if(type(this.setMap(val)) === "undefined"){
+         return false;
+   }
+   let lastIndex = this.set.length-1;//得到数组最后一位数字的下标值
+   let lastNum = this.set[lastIndex];//得到数组最后一位的数字
+   let deleteIndex = this.setMap[val];//取得删除元素的下标值
+   this.set[deleteIndex] = lastNum;//将最后一位数字放入要删除数字对应下标值的位置
+   this.setMap[lastNum] = deleteNum;//把最后一位的数字的map中的value值换成要删除元素的value值
+}
+
+RandomizedSet.prototype.getRandom = function() {
+    let size = this.set.length;
+    //返回一个0到set的长度之间的随机数
+    let random = Math.floor(Math.random() * size);
+    //以随机数为下标返回
+    return this.set[random];
+};
