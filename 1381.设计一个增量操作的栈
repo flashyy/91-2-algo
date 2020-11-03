@@ -1,0 +1,60 @@
+- 思路：
+1.在原型对象上设置一个数组和数组最大长度
+2.在数组中加入数字的时候，判断该数组的长度是否未超过最大长度，如果未超过，那么把该数字添加进去
+3.对数组删除数字的时候，判断该数组的长度是否为0，如果不为0，就删除该数
+4.对数组前k个数加val值，其他部分不管
+
+- 复杂度：
+
+ 时间复杂度：O(1),O(1),O(n) 故为O(n)
+ 空间复杂度：均为O(1)
+
+/**
+ * @param {number} maxSize
+ */
+var CustomStack = function(maxSize) {
+    this.increStack=[]; 
+    this.maxSize=maxSize;
+};
+
+/** 
+ * @param {number} x
+ * @return {void}
+ */
+CustomStack.prototype.push = function(x) {
+     if(this.maxSize>this.increStack.length){
+         this.increStack.push(x);
+     }
+};
+
+/**
+ * @return {number}
+ */
+CustomStack.prototype.pop = function() {
+      return this.increStack.length ? this.increStack.pop():-1;
+};
+
+/** 
+ * @param {number} k 
+ * @param {number} val
+ * @return {void}
+ */
+CustomStack.prototype.increment = function(k, val) {
+    let n = this.increStack.length;
+    for(let i=0;i<n;i++){
+        if(i<k){
+            this.increStack[i] += val;
+        }
+        else{
+            return;
+        }
+    }
+};
+
+/**
+ * Your CustomStack object will be instantiated and called as such:
+ * var obj = new CustomStack(maxSize)
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * obj.increment(k,val)
+ */
