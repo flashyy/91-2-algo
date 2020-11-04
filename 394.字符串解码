@@ -1,0 +1,32 @@
+- 思路：
+   需要由子问题组合得到原问题，把每一层需要叠加的字母(res)和叠加的次数(multi)记录下来，加到原字符串上，迭代字符串：
+1. 遇到数字的时候，将其转化为整数（multi）记录下来，用于后序计算
+2. 遇到字母的时候，将该字符串加入当前字符串后面
+3. 遇到左括号时候，将需要叠加的字母(res)和叠加的次数(multi)记录下来并放入栈中
+4.遇到右括号时候弹出字符串，将字符串组合起来  
+```
+var decodeString = function(s) {
+     let res="",multi=0,stack=[];
+     for(let char of s){
+         if(!isNaN(char)){
+             multi = multi*10+parseInt(char);
+         }
+         else if(char === "["){
+             stack.push([multi,res]);
+             res = "";
+             multi = 0;
+         }
+         else if(char === "]"){
+             let [multi,str] = stack.pop();
+             res = str+res.repeat(multi);
+         }  
+         else{
+            res +=char;
+         }
+     }
+     return res;
+};
+```
+- 复杂度：
+时间复杂度：O(n)
+空间复杂度：O(n)
