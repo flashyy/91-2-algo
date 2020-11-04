@@ -1,0 +1,29 @@
+思路：
+push:初始化两个数组，均将尾部作为进栈口，一个作为原数组，一个作为临时数组，首先将原数组中的元素依次放入临时数组，将新加进来的数字加入临时栈的栈顶，之后再将临时栈的元素依次放回原数组。
+pop:弹出数组的最后一个元素
+empty:将数组的长度设置为1
+peek:取数组的最后一位
+var MyQueue = function() {
+    this.stack = [];
+};
+MyQueue.prototype.push = function(x) {
+     this.tempStack=[];
+     while(this.stack.length!== 0){
+        this.tempStack.push(this.stack.pop());
+     }
+     this.tempStack.push(x);
+     while(this.tempStack.length!== 0){
+         this.stack.push(this.tempStack.pop());
+     }
+};
+MyQueue.prototype.pop = function() {
+   return this.stack.pop();
+};
+MyQueue.prototype.peek = function() {
+    return this.stack[this.stack.length-1];
+};
+MyQueue.prototype.empty = function() {
+    return this.stack.length === 0;
+};
+时间复杂度:O(n)
+空间复杂度：O(1)
