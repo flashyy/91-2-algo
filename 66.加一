@@ -1,0 +1,20 @@
+思路：
+从最后一位开始，否则给该位加一，加一之后返回数组（答案），如果最后一位是9，则将其变为0，再将向前判断，直到循环结束,说明还需要进位，在返回数组之前添加1。
+
+var plusOne = function(digits) {
+    for(let i=digits.length-1;i>=0;i--){
+        if(digits[i] === 9){
+            digits[i] = 0;
+            //console.log(digits[i]);
+        }
+        else{
+            digits[i] = digits[i]+1;//最后一位加1
+            return digits;//返回加好的数组
+        }
+    }
+    digits.unshift(1);
+    return digits;
+};
+
+时间复杂度:O(n)
+空间复杂度:O(1)
