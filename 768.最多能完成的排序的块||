@@ -1,0 +1,26 @@
+- 思路：
+维护一个每个块的最大元素的单调递增栈，每push进一个元素，保证该元素比前一个块的最大值大而比当前块的最大值小。
+具体过程：遍历这个数组，当前元素比栈顶元素小，就将栈顶视为该块最大值弹出，再拿当前元素与栈顶依次比较，如果比当前元素大，证明是点前块里面的，反之说明就是前一个块中的最大值。
+
+- 代码：
+```
+var maxChunksToSorted = function(arr) {
+    let stack=[];//维护一个单调递增的栈，保证栈中的元素都是单调递增的
+    for(let num of arr){
+        if(stack.length!==0 && num<stack[stack.length-1]){//维护一个块，这个块的最大元素要比前一个块的最大元素要小
+            let top = stack.pop();//记录下栈顶元素(预备的最大元素)
+            while(stack.length!==0 && num<stack[stack.length-1]){//该块的最小的元素要比前一个块的最大元素要大
+                stack.pop();
+            }
+            stack.push(top);//将其保留栈中
+        }
+        else{
+            stack.push(num);
+        }
+    }
+    return stack.length;
+};
+```
+- 复杂度：
+时间复杂度：O(n)
+空间复杂度：O(1)
