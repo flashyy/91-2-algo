@@ -1,0 +1,28 @@
+思路：首先创建两个头结点，再创建两个指针指向这两个头结点，从链表的头部开始遍历，如果该结点的值小于给点值的话将一个头结点的下一位指向该结点，如果该结点的值大于或者等于给定结点的值，
+将另一个头结点的下一位指向该结点，将head的值赋给其中一个指针，将head向后移动一位。最后将全小于给定值的链表的末尾的下一位指向全大于或者等于给定值的头结点的下一位。
+
+代码:
+var partition = function(head, x) {
+    let newHead1 = new ListNode(-1);
+    let newHead2 = new ListNode(-1);
+    let pre1 = newHead1,pre2= newHead2;
+    while(head){
+        if(head.val < x){
+            pre1.next = head;
+            pre1 = head;
+        }
+        else{
+            pre2.next = head;
+            pre2 = head;   
+        }
+        head = head.next;
+    }
+    pre1.next = newHead2.next;
+    //console.log(pre2);
+    pre2.next = null;
+    return newHead1.next;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
