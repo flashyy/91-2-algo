@@ -1,0 +1,42 @@
+思路：
+利用快慢指针的思想对前面的一半和后面的一半断开，对后面一半进行逆置处理，之后对两个链表进行合并操作，
+
+代码：
+var reorderList = function(head) {
+    if(!head || !head.next || !head.next.next){
+        return head;
+    }
+    let fast = slow = head;
+    while(fast.next && fast.next.next){
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+    let secondHead = slow.next;
+    slow.next = null;
+    secondHead =reverseList(secondHead);
+    while(secondHead){
+        let next = secondHead.next;
+        secondHead.next = head.next;
+        head.next = secondHead;
+        head = secondHead.next;
+        secondHead = next; 
+    } 
+    return head; 
+};
+function reverseList(head){
+    if(!head){
+        return null;
+    }
+    let newHead = null;
+    while(head){
+        let next = head.next;
+        head.next = newHead;
+        newHead = head;
+        head = next;
+    }
+    return newHead;
+}
+
+复杂度：
+时间复杂度：O(n)
+空间复杂度：O(1)
