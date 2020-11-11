@@ -1,0 +1,20 @@
+思路：
+前一个结点和后一个结点比较，删除掉重复的结点。
+
+代码：
+var deleteDuplicates = function(head) {
+     let pre = head;
+     while(pre && pre.next){
+         if(pre.val === pre.next.val){
+             pre.next = pre.next.next;
+         }
+         else{
+             pre = pre.next;
+         }
+     }
+     return head;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
