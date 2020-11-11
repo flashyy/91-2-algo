@@ -1,0 +1,34 @@
+- 思路：
+利用快慢指针思想，如果快慢指针相遇了，说明是有环存在的，快指针走的路程是慢指针的两倍，所以之间存在一个等式，推导得出从头指针到环入口的地方距离和快慢指针相遇的地方到环入口的地方相等。
+
+- 代码：
+```
+var detectCycle = function(head) {
+    let fast = slow = head;
+    let meet = null;
+    while(fast){
+        fast = fast.next;
+        slow = slow.next;
+        if(!fast){
+            return null;
+        }
+        fast = fast.next;
+        if(fast === slow){
+            meet = fast;
+            break;
+        }
+    }
+    while(head && fast){
+        if(head === meet){
+            return head;
+        }
+        head = head.next;
+        meet = meet.next;
+    }
+    return null;
+};
+```
+
+- 复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
