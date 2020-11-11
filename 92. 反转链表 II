@@ -1,0 +1,38 @@
+思路：
+首先找到需要反转的链表区间的前驱结点，将其移动到相应的位置。需要明确的是需要翻转的链表区间的头结点是要记录下来，该头结点会变成需要翻转部分的链表的最后一个结点，因为需要进行链表的翻转。
+最后将最后一位的指针指向翻转链表段之后结点，将翻转链表段前面的结点链接到翻转完成的头结点。
+
+代码：
+var reverseBetween = function(head, m, n) {
+      let result = head;
+      let pre = null;
+      let changeLen = n-m+1;
+      while(head && m-1){
+          pre = head;
+          head = head.next;
+          --m;
+      }
+      console.log(head);
+      let modifyListTail = head;
+      let newHead = null;
+      while(changeLen!==0 && head){
+          let next = head.next;
+          head.next = newHead;
+          newHead = head;
+          head = next;
+          //console.log(newHead.val,head.val,modifyListTail.val);
+          changeLen--;
+      }
+      modifyListTail.next = head;
+      if(pre){
+          pre.next = newHead;
+      }
+      else{
+          result = newHead;
+      }
+      return result;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
