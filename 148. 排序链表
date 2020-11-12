@@ -1,0 +1,35 @@
+思路：这道题利用了递归的思想处理问题，利用快慢指针把链表切分成两段，之后对这两段进行合并的处理，将结果返回给上一层。
+
+var sortList = function(head) {
+     if(!head || !head.next){
+         return head;
+     }
+     let slow = fast = head;//快慢指针求出两段链表
+     while(fast.next && fast.next.next){
+         fast = fast.next.next;
+         slow = slow.next;
+     }
+     let newHead = slow.next;//记录下后面的链表的头指针
+     slow.next = null;//断开前后两个链表
+     let left = sortList(head);//对左边的链表递归处理
+     let right = sortList(newHead);//对右边的链表递归处理
+     let res = new ListNode(-1,null);
+     let p = res;
+     while(left && right){//对两个递归过的链表进行合并的处理
+         if(left.val <= right.val){
+             res.next = left;
+             left = left.next;
+         }
+         else{
+             res.next = right;
+             right = right.next;
+         }
+         res = res.next;
+     }
+     res.next = left?left:right;
+     return p.next;
+};
+
+复杂度分析：
+时间复杂度：O(nlogn)
+空间复杂度：O(logn)
