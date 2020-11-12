@@ -1,0 +1,98 @@
+思路：
+利用双向链表和哈希表来实现LRU缓存记录，设计三个函数分别是移除给定结点函数，在头部添加结点的函数，在尾部删除结点的函数，主要操作是获取与放入两种操作，获取时必须判断是否在链表中存在，
+存在的话就移除这个结点，将其插入头部，返回该结点的值，如果不在链表中，就返回-1。
+放入时必须要判断原来是否存在这个结点，如果存在，就从哈希表中取出该结点并且将其结点值更新，然后将该结点放置于链表的头部，如果该结点在链表中不存在的话，如果可存的数量已经满了的话，
+就删除链表尾部的结点，并生成一个新的结点并将该结点放置到链表的头部，否则生成一个新的结点，将该结点放置到链表头部。
+
+代码：
+/**
+ * @param {number} capacity
+ */
+function ListNode(key,val){
+    this.key = key;
+    this.val = val;
+    this.pre = this.next = null;
+}
+
+var LRUCache = function(capacity) {
+  this.capacity = capacity;
+  this.size = 0;
+  this.data = {};
+  this.head = new ListNode();
+  this.tail = new ListNode();
+  this.head.next = this.tail;
+  this.tail.pre = this.head;   
+};
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function(key) {
+    if(this.data[key] !== undefined){
+        let node = this.data[key];
+        this.removeNode(node);
+        this.appendHead(node);
+        return node.val;
+    }
+    else{
+        return -1;
+    }
+};
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+   let node;
+   if(this.data[key] !== undefined){
+       node = this.data[key];
+       this.removeNode(node);
+       node.val = value;
+   }
+   else{
+       node = new ListNode(key,value);
+       this.data[key] = node;
+       if(this.size < this.capacity){
+           this.size++;
+       }
+       else{
+           key = this.removeNodeTail();
+           delete this.data[key];
+       }
+   }
+   this.appendHead(node);
+};
+
+
+
+LRUCache.prototype.removeNode = function(node){
+    let preNode = node.pre,nextNode = node.next;
+    preNode.next = nextNode;
+    nextNode.pre = preNode;
+}
+
+LRUCache.prototype.appendHead = function(node){
+    let firstNode = this.head.next;
+    this.head.next = node;
+    node.pre = this.head;
+    node.next = firstNode;
+    firstNode.pre = node;
+}
+
+LRUCache.prototype.removeNodeTail = function(node){
+    let key = this.tail.pre.key;
+    this.removeNode(this.tail.pre);
+    return key;
+}
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */
+
+复杂度分析：
+时间复杂度：O(1)
+空间复杂度：O(n)
