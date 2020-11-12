@@ -1,0 +1,22 @@
+思路：
+  就是最最基础的翻转链表呢！！！！当时快手面试的时候写不出来呢！！！！
+
+代码：
+var reverseList = function(head) {
+    let newHead = null;
+    while(head){
+        let next = head.next;//记录头结点的下一位
+        head.next = newHead;//头结点指向新的结点
+        newHead = head;//新的结点指向当前头结点
+        head = next;//头结点指向记录过的下一位
+    }
+    return newHead;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
+
+
+
+
