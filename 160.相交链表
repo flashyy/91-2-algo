@@ -1,0 +1,54 @@
+- 思路：链表相交的结点一定是同一个结点，之后所有的结点都合并了，所以长度是相同的，因此前面的结点长度有可能不同，所以那个链表长度更长，就先向前走差值的距离，之后再一起走到相同的点，就找到相同的点。
+
+- 代码：
+```
+var getIntersectionNode = function(headA, headB) {
+      let headALength = headBLength = 0;
+      let preA=headA,preB=headB;
+      while(preA || preB){
+           if(preA){
+                preA = preA.next;
+                headALength++;
+           }
+           if(preB){
+                preB = preB.next;
+                headBLength++;
+           }
+      }
+      let dValue = headBLength-headALength;
+      console.log(headALength,headBLength);
+      preA=headA;
+      preB=headB;
+      if(dValue>0){
+          for(let i=0;i<dValue;i++){
+              preB=preB.next;
+          }
+          while(preA!=preB){
+              preA = preA.next;
+              preB = preB.next;
+          }
+          return preA;
+      }
+      if(dValue<0){
+          for(let i=0;i<dValue;i++){
+              preA=preA.next;
+          }
+          while(preA!=preB){
+              preA = preA.next;
+              preB = preB.next;
+          }
+          return preA;
+      }
+      if(dValue === 0){
+          while(preA != preB){
+              preA = preA.next;
+              preB = preB.next;
+          }
+          return preA;
+      }
+};
+```
+
+- 复杂度：
+时间复杂度：O(n)
+空间复杂度：O(1)
