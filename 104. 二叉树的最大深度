@@ -1,0 +1,15 @@
+- 思路：如果当前结点为空，返回0,（说明此处没有结点），如果不为空，返回左右子树的深度，取左右子树的最大深度并且加上本身高度1。
+
+- 代码：
+```
+var maxDepth = function(root) {
+     if(!root){
+         return 0;
+     }
+     return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+};
+```
+
+- 复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(递归栈的长度)
