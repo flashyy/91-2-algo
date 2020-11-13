@@ -1,0 +1,34 @@
+- 思路：首先利用快慢指针确定数组的中点的值，记录中点的值，然后对左右两边的链表递归找到中点。
+
+- 代码：
+```
+var sortedListToBST = function(head) {
+    if(!head){
+        return null;
+    }
+    if(!head.next){
+        return new TreeNode(head.val);
+    }
+    let pre = preMid(head);
+    let mid = pre.next;
+    pre.next = null;
+    let node = new TreeNode(mid.val);
+    node.left = sortedListToBST(head);
+    node.right = sortedListToBST(mid.next);
+    return node;
+};
+
+function preMid(head){
+    let slow = fast = pre = head;
+    while(fast && fast.next){
+        pre=slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return pre;
+}
+```
+
+- 复杂度：
+时间复杂度：O(n)
+空间复杂度：O(logn)
