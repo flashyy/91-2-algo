@@ -1,0 +1,20 @@
+思路：保证有一个空的头结点，在第一个结点和第二个结点不为空的情况之下，将第一个和第二个结点记录下来，将第三个结点也记录下来，第一个结点指向第三个结点，第二个结点指向第一个结点，头结点指向第二个结点，如果对下一组进行交换，需要将第一个结点（现在是第二个）记录下来，再去循环。
+var swapPairs = function(head) {
+     let new_head = new ListNode(-1);
+     new_head.next = head;
+     let pre = new_head;
+     while(pre.next && pre.next.next){
+         let l1=pre.next;
+         let l2=pre.next.next;
+         let next = l2.next;
+         l1.next=next;
+         l2.next=l1;
+         pre.next = l2;
+
+         pre = l1;
+     }
+     return new_head.next;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
