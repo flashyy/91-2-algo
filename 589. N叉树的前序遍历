@@ -1,0 +1,17 @@
+思路：N叉树的前序遍历和二叉树的遍历是相同的。
+
+var preorder = function(root) {
+     let res = [];
+     function inorder(node){
+         if(node){
+            res.push(node.val);
+            node.children.map((child)=>(inorder(child)));
+         }
+     }
+     inorder(root);
+     return res;
+};
+
+复杂度分析：
+空间复杂度：O(n)
+时间复杂度：O(n)
