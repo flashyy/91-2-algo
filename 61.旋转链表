@@ -1,0 +1,31 @@
+思路：
+利用快慢指针的思想将快指针指向最后一个结点，慢指针指向倒数第二个结点，将快指针的下一个结点设置为原来的头结点，将慢指针的下一位记录下来作为新的头结点，将慢指针的下一个结点置为空。
+此时我注意到一个问题，使得代码没有通过，就是给的要旋转的值比链表的长度还要长，所以看了测试结果有k%链表长度的结点进行了旋转。所以要算出链表长度。并且注意到链表为空或者长度为1的情况，直接返回原数组。
+var rotateRight = function(head, k) {
+     if(!head||!head.next){
+         return head;
+     }
+     let fast = slow = head;
+     let newHead = head;
+     let count = 0;
+     while(newHead){
+       newHead = newHead.next;
+       count++;
+     }
+     k=k%count;
+     for(let i=0;i<k;i++){
+         fast = fast.next;
+     }
+     while(fast.next){
+         fast = fast.next;
+         slow = slow.next;
+     }
+     fast.next = head;
+     newHead = slow.next;
+     slow.next = null;
+     return newHead;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
+
