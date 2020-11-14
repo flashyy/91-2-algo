@@ -1,0 +1,17 @@
+思路：
+递归判断树的左右子树是否相同，出口是如果两个结点均为空则返回真，如果其中任意一个为空或者结点的值不相等的话就返回假。
+
+代码：
+var isSameTree = function(p, q) {
+    if(!q && !p){
+        return true;
+    }
+    if(!p || !q || p.val !== q.val){
+        return false;
+    }
+    return isSameTree(p.left,q.left) && isSameTree(p.right,q.right);
+};
+
+复杂度分析：
+时间复杂度:O(n)
+空间复杂度：O(h)树的高度
