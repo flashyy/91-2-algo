@@ -1,0 +1,43 @@
+逆波兰表达式又叫做后缀表达式。在通常的表达式中，二元运算符总是置于与之相关的两个运算对象之间，这种表示法也称为中缀表示。
+
+波兰逻辑学家J.Lukasiewicz于1929年提出了另一种表示表达式的方法，按此方法，每一运算符都置于其运算对象之后，故称为后缀表示。
+
+逆波兰表达式是一种十分有用的表达式，它将复杂表达式转换为可以依靠简单的操作得到计算结果的表达式。例如(a+b)(c+d)转换为ab+cd+
+
+思路就是：
+
+遍历列表，依次入栈，直到遇到算数运算符。
+将栈顶两个元素出栈运算，将结果压栈
+重复以上过程直到所有的 token 都处理完毕。
+
+代码：
+var evalRPN = function(tokens) {
+    const stack = [];
+    for(let i=0;i<tokens.length;i++){
+        const token = tokens[i];
+        if(!isNaN(token)){
+            stack.push(token);
+        }
+        else{
+            const a = Number(stack.pop());
+            const b = Number(stack.pop());
+            if(token === "*"){
+                stack.push(a*b);
+            }
+            else if(token === "+"){
+                stack.push(a+b);
+            }
+            else if(token === "-"){
+                stack.push(b-a);
+            }
+            else if(token === "/"){
+                stack.push(b/a>>0);
+            }
+        }
+    }
+    return stack.pop();
+};
+
+复杂度分析：
+时间复杂度分析：O(n)
+空间复杂度分析：O(n)
