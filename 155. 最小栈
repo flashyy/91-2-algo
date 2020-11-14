@@ -1,0 +1,65 @@
+思路：
+维护一个最小栈的栈，每当一个新的值想加入栈中，看最小栈的栈顶的值是否大于该值，如果大于就将该值加入最小栈的顶部，如果大于就将原来最小栈的栈顶的值再加入最小栈的栈顶。
+
+代码：
+/**
+ * initialize your data structure here.
+ */
+var MinStack = function() {
+   this.data_stack = [];
+   this.min_stack = [];
+};
+
+/** 
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function(x) {
+    this.data_stack.unshift(x);
+    if(this.min_stack === 0){
+        this.min_stack.unshift(x);
+    }
+    else{
+        if(x > this.min_stack[0]){
+            x = this.min_stack[0];
+        }
+        this.min_stack.unshift(x);
+    }
+    //console.log(this.min_stack);                      
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    //console.log(this.min_stack.shift());
+    this.min_stack.shift();
+    return this.data_stack.splice(0,1)[0];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    return this.data_stack[0];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    return this.min_stack[0];   
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+ 
+ 复杂度分析：
+ 时间复杂度：O(1)
+ 空间复杂度：O(n)
