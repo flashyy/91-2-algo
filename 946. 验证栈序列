@@ -1,0 +1,18 @@
+思路：新建一个栈stack,按原来给的元素序列（pushed）将元素push入栈，每一次push一个元素，需要检查是否与队列远古三首部元素是否相同，如果相同，则弹出队首元素并且弹出栈顶元素，直到两个元素不相同结束。
+最终栈如果为空说明序列合法，否则不合法。
+代码：
+var validateStackSequences = function(pushed, popped) {
+     let stack = [];
+     for(let i=0;i<pushed.length;i++){
+          stack.unshift(pushed[i]);
+          while(stack.length !== 0 && stack[0] === popped[0]){//此处确定栈不为空，不是stack这个东西存不存在！！！
+              stack.shift();//将栈顶元素弹出
+              popped.shift();//将堆头元素弹出！
+          }
+     }
+     return stack.length === 0;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度:O(n)
