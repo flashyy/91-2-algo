@@ -1,0 +1,23 @@
+- 思路：递归的出口有两个：一个是传入的结点为空时，返回上一层数字零。另一个是传入的结点是叶子结点的时候，返回上一层是上一层之前全部值的和乘以10并且加上当前的结点。
+
+- 代码：
+
+```
+var sumNumbers = function(root) {
+    return helper(root,0);
+};
+function helper(node,lastLevel){
+    if(!node){
+        return 0;
+    }
+    let currentLevel = lastLevel*10 + node.val;
+    if(!node.left && !node.right){
+        return currentLevel;
+    }
+    return helper(node.left,currentLevel)+helper(node.right,currentLevel);
+}
+```
+
+- 复杂度分析：
+时间复杂度：O(n) n是二叉树的结点的个数，
+空间复杂度：O(n)  递归栈的深度
