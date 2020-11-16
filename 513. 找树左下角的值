@@ -1,0 +1,45 @@
+思路：
+DFS：设置一个最大的层数，当当前层大于最大层数的时候，将其设置为最左边的值，然后对左右子树进行递归处理。最后返回最左边的结点。
+BFS：设置一个队列，遍历这个树同时控制队列不为空，让右孩子先入队，左孩子之后入队，那么最后一个入队的一定是最左边的结点。
+代码：
+DFS：
+var findBottomLeftValue = function(root) {
+    let mostLeft = 0,maxLayer = -1;
+    function dfs(node,layer){
+        if(!node){
+            return;
+        }
+        if(layer>maxLayer){
+            maxLayer = layer;
+            mostLeft = node.val;
+        }
+        dfs(node.left,layer+1);
+        dfs(node.right,layer+1);
+    }
+    dfs(root,0);
+    return mostLeft;
+};
+BFS：
+var findBottomLeftValue = function(root) {
+    const q = [];
+    q.push(root);
+    while(q.length !== 0){      
+        root = q.shift();
+        if(root.right){
+            q.push(root.right);
+        }
+        if(root.left){
+            q.push(root.left);
+        }      
+    }
+    return root.val;
+};
+
+复杂度分许：
+DFS
+时间复杂度：O(n)
+空间复杂度：O(h) 递归的次数，即为树的高度
+
+BFS
+时间复杂度：O(n)
+空间复杂度：O(w) 最宽的一层（可能为最后一层）
