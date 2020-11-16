@@ -1,0 +1,24 @@
+思路：对两个树都进行遍历操作，原二叉树上结点与给定结点相同，就返回复制树上相应的结点。递归时要记录下返回的结点（结点本身）。
+
+代码：
+var getTargetCopy = function(original, cloned, target) {
+    if(!original){
+        return null;
+    }
+    if(original === target){
+        return cloned;
+    }
+    let res = getTargetCopy(original.left,cloned.left,target);
+    if(res){
+        return res;
+    }
+    res = getTargetCopy(original.right,cloned.right,target);
+    if(res){
+        return res;
+    }
+     return null;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(h)
