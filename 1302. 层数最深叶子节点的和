@@ -1,0 +1,31 @@
+思路：
+对树进行递归处理，设置一个本层的高度和一个最大的高度，如果本层的高度等于最大高度，那么将本层的高度的值赋给最大高度并且把和更新为当前结点的值，如果本层高度就是最大高度，那么给和
+加上当前结点的值。对当前两个结点的左右结点递归处理。
+代码：
+var deepestLeavesSum = function(root) {
+     if(!root){
+         return 0;
+     }
+     let maxDepth = -1;
+     let total = 0;
+     function helper(node,curDepth){
+         if(!node){
+            return 0;
+         }
+         if(curDepth > maxDepth){
+            maxDepth = curDepth;
+            total = node.val;
+        }
+         else if(curDepth === maxDepth){
+            total += node.val;
+        }
+        helper(node.left,curDepth+1);
+        helper(node.right,curDepth+1);
+    }
+     helper(root,0);
+     return total;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(h) 递归树的高度
