@@ -1,0 +1,85 @@
+思路：
+DFS：
+序列化：对左右子树进行递归处理，返回上一层的是本层结点的值和对左右子树递归返回的结果。反序列化：对数组中每一个数创建一个结点，再对左右子树进行递归处理。
+BFS：
+序列化：利用层次遍历的遍历方法将遍历结果存到一个数组中并将其转化为字符串。反序列化：还是利用层次遍历的方法，将数组中标志位的数字创建为结点存到队列里面，将左孩子不为空的设置为
+左孩子，将右孩子不为空的设置为右孩子。每次循环完成之后将标志位向后移动2。循环直到标志等于数组长度。
+代码：
+DFS:
+var serialize = function(root) {
+    if(!root){
+        return "X";
+    }
+    return root.val +","+serialize(root.left)+","+serialize(root.right);
+};
+
+var deserialize = function(data) {
+    const arr = data.split(",");
+    return dfs(arr);
+};
+ function dfs(arr){
+        const rootVal = arr.shift();
+        if(rootVal === "X"){
+            return null;
+        }
+        const root = new TreeNode(rootVal);
+        root.left = dfs(arr);
+        root.right = dfs(arr);
+        return root;
+}
+
+BFS：
+var serialize = function(root) {
+    let queue = [],res = [];
+    queue.push(root);
+    while(queue.length!==0){
+        const node = queue.shift();
+        if(node){
+            res.push(node.val);
+            queue.push(node.left);
+            queue.push(node.right);
+        }
+        else{
+            res.push("X");
+        }
+    }
+    return res.join(",");
+};
+
+var deserialize = function(data) {
+    if(data === "X"){
+        return null;
+    }
+    const arr = data.split(",");
+    const root = new TreeNode(arr[0]);
+    const queue = [];
+    queue.push(root);
+    let index = 1;
+    while(index < arr.length){
+        const node = queue.shift();
+        let leftVal = arr[index];
+        let rightVal = arr[index+1];
+        if(leftVal !== "X"){
+            let leftNode = new TreeNode(leftVal);
+            node.left = leftNode;
+            queue.push(leftNode);
+        }
+        if(rightVal !== "X"){
+            let rightNode = new TreeNode(rightVal);
+            node.right = rightNode;
+            queue.push(rightNode);
+        }
+        index = index+2;
+    }
+    return root;
+};
+
+复杂度分析：
+DFS：
+序列化/反序列化
+时间复杂度：O(n)
+空间复杂度：O(h)
+
+BFS:
+时间复杂度：O(n)
+空间复杂度：O(w) 队列的最大长度
