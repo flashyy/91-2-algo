@@ -1,0 +1,53 @@
+- 思路：
+对二叉树进行递归，根的x与y值标记为(0,0)，每一步都对左子树设置为(x-1,y-1)，右子树设置为(x+1,y-1)，得到一个数组，
+对这个数组x坐标进行升序，y降序，结点值升序排序。之后根据相同的x值将其结点值归为一组。
+
+-代码：
+```
+var verticalTraversal = function(root) {
+    if(!root){
+        return [];
+    }
+    let locationList = [];
+    function dfs(node,x,y){
+        if(!node){
+            return;
+        }
+        locationList.push([x,y,node.val]);
+        dfs(node.left,x-1,y-1);
+        dfs(node.right,x+1,y-1);
+    }
+    dfs(root,0,0);
+
+    locationList = locationList.sort((a,b)=>{
+         if(a[0] != b[0]){
+             return a[0] - b[0];
+         }
+         if(a[1] != b[1]){
+             return b[1] - a[1];
+         }
+         return a[2] - b[2];
+    });
+
+    let indexOfx = locationList[0][0];
+    let result = [[locationList[0][2]]];
+    for(let i=1;i<locationList.length;i++){
+         let location = locationList[i];
+         let x = location[0];
+         if(x === indexOfx){
+             let last = result[result.length-1];
+             last.push(location[2]);
+         }
+         else{
+             indexOfx = x;
+             result.push([location[2]]);
+         }
+    }
+
+    return result;
+}; 
+```
+
+- 复杂度分析：
+时间复杂度：O(nlogn)
+空间复杂度：O(n) 递归的时候给每一个结点分配一个记录（x,y,val）的空间。
