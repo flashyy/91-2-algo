@@ -1,0 +1,23 @@
+- 思路：
+哈希表存储一对键值对：[key,value]，这里key存储数值而value存储数值再数组中对应的下标。对数组循环之后，如果有target-nums[i]的值等于数组中的值，那么可以说存在两个数之和等于target。
+
+- 代码：
+
+```
+var twoSum = function(nums, target) {
+    let numberMap = new Map();
+    for(let i=0;i<nums.length;i++){
+        if(numberMap.has(target - nums[i])){
+            return [numberMap.get(target-nums[i]),i];
+        }
+        else{
+            numberMap.set(nums[i],i);
+        }
+    }
+    return null;
+};
+```
+
+- 复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
