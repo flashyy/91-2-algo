@@ -1,0 +1,23 @@
+思路：对数组中属性为subordinates的数组进行递归处理。
+代码：
+var GetImportance = function(employees, id) {
+     if(!employees){
+        return 0;
+     }
+     for(let i=0;i<employees.length;i++){
+         if(employees[i].id === id){
+             let result = employees[i].importance;
+             if(employees[i].subordinates){
+                 employees[i].subordinates.map((item)=>{
+                    result += GetImportance(employees,item);
+                    //return result;
+                 });
+             }
+             return result;
+         }
+     }
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(h) 计算时隐式调用DFS的次数
