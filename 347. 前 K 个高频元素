@@ -1,0 +1,57 @@
+思路：
+对元素组的元素进行哈希表的元素频率统计，并将原数组放入set中去除重复元素，对去重过后的数组按照对应元素哈希表的出现的频率从大到小排序，并且取出前k个元素。
+也可以利用桶排序的方法，创建一个新的数组，将出现的频率作为数组的下标，元素作为数组元素，取出数组的最后K位元素得到结果。
+代码：
+var topKFrequent = function(nums, k) {
+    let numberMap = new Map(),arr = [...new Set(nums)];
+    nums.map((item)=>{
+        if(numberMap.has(item)){
+            numberMap.set(item,numberMap.get(item)+1);
+        }
+        else{
+            numberMap.set(item,1);
+        }
+    });
+    return arr.sort((a,b)=>{return numberMap.get(b) - numberMap.get(a)}).slice(0,k);
+};
+
+桶排序：
+var topKFrequent = function(nums, k) {
+    let numberMap = new Map();
+    nums.map((item)=>{
+        if(numberMap.has(item)){
+            numberMap.set(item,numberMap.get(item)+1);
+        }
+        else{
+            numberMap.set(item,1);
+        }
+    });
+    if(numberMap.size<k){//将哈希表总共元素个数小于K的元素返回
+        return [...numberMap.keys()];
+    }
+    return bucketSort(numberMap,k);
+};
+
+function bucketSort(map,k){
+    let res = [],arr =[];
+    for(let [key,value] of map.entries()){
+        if(!arr[value]){//将元素出现频率作为下标
+            arr[value] = [key];
+        }
+        else{
+            arr[value].push(key);
+        }
+    }
+    for(let i=arr.length-1;i>=0&&res.length<k;i--){//数组中后K位元素取出并且放入结果数组中
+        if(arr[i]){
+            res.push(...arr[i]);
+        }
+    }
+    return res;
+}
+复杂度分析：
+时间复杂度:O(nlogn)
+空间复杂度:O(n)
+桶排序：
+时间复杂度:O(n)
+空间复杂度:O(n)
