@@ -1,0 +1,32 @@
+思路：
+ 两个for循环，以数组中任意一个元素作为起点计算它到数组其他元素的距离，相同的距离给hash表相同距离的key值对应的value值加一，并且如果value值大于2的要计算它的全排列。
+代码：
+var numberOfBoomerangs = function(points) {
+    let result = 0;
+    for(let i=0;i<points.length;i++){
+        let disMap = new Map();
+             for(let j=0;j<points.length;j++){
+                if(i!==j){
+                     let dis = distance(points[i],points[j]);
+                     if(disMap.has(dis)){
+                        disMap.set(dis,disMap.get(dis)+1);
+                     }
+                    else{
+                        disMap.set(dis,1);
+                    }
+                }
+            }
+        for(let value of disMap.values()){
+           result += value*(value-1);
+        }
+        disMap.clear();
+    }
+    return result;
+};
+function distance(a,b){
+    return (b[0]-a[0])*(b[0]-a[0]) + (b[1]-a[1])*(b[1]-a[1]);
+}
+
+复杂度分析：
+时间复杂度：O(n*n)
+空间复杂度：O(n)
