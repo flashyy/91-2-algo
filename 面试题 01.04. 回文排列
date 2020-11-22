@@ -1,0 +1,25 @@
+思路：
+对回文字符串中每一项元素统计其出现的频次，如果有一个字符取余出现一次或者所有字符出现次数都为偶数，那么就是合法的。否则返回假。
+
+代码：
+var canPermutePalindrome = function(s) {
+     let wordMap = new Map();
+     for(let word of s){
+         if(wordMap.has(word)){
+             wordMap.set(word,wordMap.get(word)+1);
+         }
+         else{
+             wordMap.set(word,1);
+         }
+     }
+     let count = 0;
+     for(let value of wordMap.values()){
+         if(value%2 === 1){
+             count += 1;
+         }
+     }
+     if(count>1){
+         return false;
+     }
+     return true;
+};
