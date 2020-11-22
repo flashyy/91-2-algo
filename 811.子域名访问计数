@@ -1,0 +1,37 @@
+思路：
+将数组中一条元素（访问次数加域名）利用空格分隔，之后根据url的根域名以及次域名来确定访问的域名，并且根据分割之前访问域名的次数确定访问次数。
+代码：
+var subdomainVisits = function(cpdomains) {
+    let map = new Map();
+    for(let i=0;i<cpdomains.length;i++){
+        let [times,url] = cpdomains[i].split(" "),temp = "";
+        times = parseInt(times);
+        //let domains = url.split(".");
+        for(let i=url.length-1;i>=0;i--){
+            if(url[i] === "."){
+               if(map.has(temp)){
+                   map.set(temp,map.get(temp)+times);
+               }
+               else{
+                   map.set(temp,times);
+               }
+            }
+            temp = url[i]+temp;
+        }
+        if(map.has(temp)){
+            map.set(temp,map.get(temp)+times);
+        }
+        else{
+            map.set(temp,times);
+        }
+    }
+    let res = [];
+    for(let [key,value] of map.entries()){
+        res.push(value+" "+key);
+    }
+    return res;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
