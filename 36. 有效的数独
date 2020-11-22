@@ -1,0 +1,32 @@
+思路：
+对9行数组，9列数字，9个方块数字每个都设置一个哈希表，分别放置出现的数字，之后查找该数字在上述自己对应的行列和方块中出现的次数是否大于一。
+代码：
+var isValidSudoku = function(board) {
+    let cols = new Map(),rows = new Map(),boxes = new Map();
+    for(let i=0;i<9;i++){
+        let col = new Map(),row = new Map(),box = new Map();
+        cols.set(i,col);
+        rows.set(i,row);
+        boxes.set(i,box);
+    }
+    for(let i=0;i<9;i++){
+        for(let j=0;j<9;j++){
+            if(board[i][j] !== "."){
+               let num = parseInt(board[i][j]);
+               let boxIndex = parseInt(i/3)*3+parseInt(j/3);
+               let col = cols.get(j),row = rows.get(i),box = boxes.get(boxIndex);
+               col.set(num,col.has(num)?+col.get(num)+1:+1);
+               row.set(num,row.has(num)?+row.get(num)+1:+1);
+               box.set(num,box.has(num)?+box.get(num)+1:+1);
+               if(col.get(num)>1 || row.get(num)>1 || box.get(num)>1){
+                   return false;
+               }
+            }
+        }
+    }
+    return true;
+};
+
+复杂度分析：
+时间复杂度: O(1) 进行了一次迭代
+空间复杂度: O(n*n) ???????
