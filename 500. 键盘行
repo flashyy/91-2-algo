@@ -1,0 +1,24 @@
+思路：
+对键盘上所有的数字都设置一个对应值，且同一行的设置成一个值，对给出的word集合进行遍历，对其中每一个单词的对应值进行比较看是否相同，如果全相同就返回ture,否则返回false。
+得出最后的结果。
+
+代码：
+var findWords = function(words) {
+     let keyboardObj ={
+         q:0,w:0,e:0,r:0,t:0,y:0,u:0,i:0,o:0,p:0,
+         a:1,s:1,d:1,f:1,g:1,h:1,j:1,k:1,l:1,
+         z:2,x:2,c:2,v:2,b:2,n:2,m:2
+     };
+     if(words.length === 0){
+         return [];
+     }
+     return words.filter((word)=>{
+         let lowerWord = word.toLocaleLowerCase();
+         let firstPos = keyboardObj[lowerWord[0]];
+         return lowerWord.split("").every((x)=>{ return keyboardObj[x] === firstPos});
+     });
+};
+
+复杂度分析：
+时间复杂度：O(n*n)
+空间复杂度：O(1)
