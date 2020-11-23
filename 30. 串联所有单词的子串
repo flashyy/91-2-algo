@@ -1,0 +1,41 @@
+思路：
+将出words数组中的元素，设置一个hash表，将单词存入hash表中，从头开始遍历一次数组，每次截取word长度的字符，一共截取words长度次就可以，如果截取到的tempMap和map一致，那么加入到
+结果数组中，否则就向前移动一个指针，重新去重头遍历word长度的字符串。
+代码：
+var findSubstring = function(s, words) {
+    if(s.length ===0 || words.length === 0){
+        return [];
+    }
+    let result =[];
+    let n = words.length;
+    let wordLen = words[0].length;
+    let windowLen = wordLen*n;
+    let wordMap = new Map();
+    words.forEach((word)=>{
+        wordMap.set(word,wordMap.has(word)?wordMap.get(word)+1:1);
+    });
+    for(let i=0;i<s.length-windowLen+1;i++){
+        let tempMap = new Map();
+        let tempStr = s.slice(i,i+windowLen);
+        for(let j=0;j<windowLen;j+=wordLen){
+           let tempS = tempStr.slice(j,j+wordLen);
+           tempMap.set(tempS,tempMap.has(tempS)? +tempMap.get(tempS)+1:+1);
+        }
+        if(judge(wordMap,tempMap)){
+            result.push(i);            
+        }
+    }
+    return result;
+};
+function judge(map1,map2){
+    for(let [key,value] of map1){
+            if(map2.get(key) !== value){
+                 return false;
+            }
+    }
+    return true;
+}
+
+复杂度分析：
+时间复杂度: O(1)
+空间复杂度：O(1)
