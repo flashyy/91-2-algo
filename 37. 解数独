@@ -1,0 +1,66 @@
+思路：
+1.初始化三个哈希表，cols,rows与boxes中分别每9行9列9方格放置都放置一个哈希表，将数字1-9放置到其本身对应的行列的相应位置，哈希表设置为true。
+2.尝试去填充数组，该位置上的三个哈希表中都不存在相应的数字，那么对其进行递归填充。
+3.如果填充失败，就进行回溯，将原来的地方改回来。
+4.递归直到数独填完。
+
+代码：
+var solveSudoku = function(board) {
+    let cols = new Map(),rows = new Map(), boxes = new Map();
+    for(let i=0;i<9;i++){
+        let col = new Map(),row = new Map(),box = new Map();
+        cols.set(i,col);
+        rows.set(i,row);
+        boxes.set(i,box);
+    }
+    for(let i=0;i<9;i++){
+        for(let j=0;j<9;j++){
+            if(board[i][j] !== "."){
+                let num = parseInt(board[i][j]);
+                let boxIndex = parseInt(i/3)*3 + parseInt(j/3);
+                let col = cols.get(j),row = rows.get(i),box = boxes.get(boxIndex);
+                col.set(num,true);
+                row.set(num,true);
+                box.set(num,true);
+            }
+        }
+    }
+    recusiveSolvePro(rows,cols,boxes,board,0,0);
+   
+};
+function recusiveSolvePro(rows,cols,boxes,board,row,col){
+    if(col === board[0].length){
+        col = 0;//要归零，不归零栈会溢出
+        row++;//最后一次加到9
+        if(row === board.length){//批判是否为9
+            return true;
+        }
+    }
+    if(board[row][col] === "."){
+        for(let num=1;num<=9;num++){
+            let boxIndex = parseInt(row/3)*3+parseInt(col/3);
+            let colMap = cols.get(col),rowMap = rows.get(row),boxMap = boxes.get(boxIndex);
+            if(!(colMap.has(num)||rowMap.has(num)||boxMap.has(num))){//其中一个数字不存在
+                colMap.set(num,true);
+                rowMap.set(num,true);
+                boxMap.set(num,true);
+                board[row][col] = num+"";
+                if(recusiveSolvePro(rows,cols,boxes,board,row,col+1)){
+                            return true;
+                }
+                board[row][col] = ".";
+                colMap.delete(num);
+                rowMap.delete(num);
+                boxMap.delete(num);
+            }
+        }
+    }
+    else{
+       return recusiveSolvePro(rows,cols,boxes,board,row,col+1);
+    }
+    return false;
+}
+
+复杂度分析：
+时间复杂度：O(9^(9*9))
+空间复杂度：O(9*9*3)
