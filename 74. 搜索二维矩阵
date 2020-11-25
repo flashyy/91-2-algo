@@ -1,0 +1,27 @@
+思路：本来就是前一行最后一个元素比第二行第一个元素小，将二维数组看成一维数组实行二分法就可以求解。
+
+代码：
+var searchMatrix = function(matrix, target) {
+     if(matrix.length === 0){
+         return false;
+     }
+     let m = matrix.length,n = matrix[0].length;
+     let begin =0,end = m*n-1;
+     while(begin<=end){
+         let mid = parseInt((begin+end)/2);
+         let num = matrix[parseInt(mid/n)][mid%n];
+         if(num === target){
+             return true;
+         }
+         else if(num<target){
+             begin = mid+1;
+         }
+         else if(num>target){
+             end = mid-1;
+         }
+     }
+     return false;
+};
+复杂度分析：
+时间复杂度：O(log(mn))
+空间复杂度：O(1)
