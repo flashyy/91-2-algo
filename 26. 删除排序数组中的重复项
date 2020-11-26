@@ -1,0 +1,19 @@
+思路：
+设置两个指针，均指向数组的头部，快指针向前走（迭代），直到快指针和慢指针所指的值相同，慢指针向前走一位，将慢指针所指的位置的值替换为快指针所指位置的值。直到快指针到末尾。
+
+代码：
+var removeDuplicates = function(nums) {
+     const size = nums.length;
+     let slowP = 0;
+     for(let fastP = 0; fastP<size;fastP++){
+         if(nums[fastP] !== nums[slowP]){
+             slowP++;
+             nums[slowP] = nums[fastP];
+         }
+     }
+     return slowP+1;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
