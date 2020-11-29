@@ -1,0 +1,24 @@
+思路：
+首先res变量记录老板不生气时使得顾客满意的数量，temp记录老板生气时不满意的顾客数量，设置一个长度固定的窗口，这个窗口里面的所有顾客都会满意，需要将原本老板生气时不满意的顾客数减去，
+这部分的值因为老板不生气了变成满意的顾客数，使得这部分值最大。将这个值与res加起来。
+
+代码：
+var maxSatisfied = function(customers, grumpy, X) {
+     let left = right = 0;
+     let res = 0,temp = 0,max = 0;
+     while(right<customers.length){
+         res += grumpy[right]?0:customers[right];//计算老板不生气的顾客满意数
+         temp += grumpy[right]?customers[right]:0;//计算老板生气时的顾客不满意数
+         if(right-left+1>X){//设置长度为X的窗口
+             temp -= grumpy[left]?customers[left]:0;//减去出了窗口的老板生气时顾客的不满意数
+             left++;//左指针向右移动
+         } 
+         right++;//右指针向右移动
+         max = Math.max(max,temp);//求出老板不生气时满意的顾客数和使用秘籍之后的在X时间内老板不生气时满意的顾客数
+     } 
+     return res+max;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
