@@ -1,0 +1,54 @@
+思路：
+法一：暴力
+法二：设置一个双向队列，将第一位元素放入队列中，将数组中剩下的元素依次放入队列，进入队列的条件是队列为空或者比队列前一位的元素小，所以前一位的元素如果想要放入数组的元素小的话就将队列
+最后一位元素弹出，直到符合条件。与此同时须得维护一个窗口，超出，这个窗口的元素必须从队列中移出，之后将队首元素放入结果数组中。
+
+代码：
+var maxSlidingWindow = function(nums, k) {
+    let n = nums.length;
+    let res = [];
+    for(let i=0;i<n-k+1;i++){
+        let max = -Infinity;
+        for(let j=i;j<i+k;j++){
+            max = Math.max(max,nums[j]);
+        }
+        res.push(max);
+    }
+    return res;
+};
+
+var maxSlidingWindow = function(nums, k) {
+    let deQueue = [];
+    let result = [];
+    let l=r=0;
+    function clean_queue(i){
+        while(nums[i]>deQueue[deQueue.length-1]){
+            deQueue.pop(); 
+        }
+    }
+    while(r<k){
+        clean_queue(r);
+        deQueue.push(nums[r]);
+        r++;
+    }
+    result.push(deQueue[0]);
+    while(r<nums.length){
+        if(nums[l] === deQueue[0]){
+            deQueue.shift();
+        }
+        l++;
+        clean_queue(r);
+        deQueue.push(nums[r]);
+        result.push(deQueue[0]);
+        r++;
+    }
+    return result;
+};
+
+复杂度分析：
+暴力：
+时间复杂度：O(nK)
+空间复杂度：O(n-k+1)
+
+时间复杂度：O(n)
+空间复杂度：O(k)
