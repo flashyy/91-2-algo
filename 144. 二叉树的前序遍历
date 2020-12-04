@@ -1,0 +1,39 @@
+思路：递归
+代码：
+var preorderTraversal = function(root) {
+    let result = [];
+    var preorder = function(node){
+        if(node){
+            result.push(node.val);
+            //console.log(node.val);
+            preorder(node.left);
+            preorder(node.right);
+        }
+    }
+    preorder(root);
+    return result;
+};
+复杂度分析：
+时间复杂度：O(n) //二叉树的个数
+空间复杂度：O(n) //二叉树的高度
+
+思路：
+将头结点入栈，之后从头结点取出来先将右节点入栈（保证最后一个弹出，先进后出），之后将左结点入栈（保证最先弹出）。循环这个过程直到栈为空。返回结果数组。
+代码：
+var preorderTraversal = function(root) {
+    const res = [];
+    const stack = [];
+    stack.push(root);
+    while(stack.length > 0){
+        let node = stack.pop();
+        if(node){
+            res.push(node.val);
+            stack.push(node.right);//保证最后一个弹出来
+            stack.push(node.left);//保证在前面弹出来
+        }
+    }
+    return res;
+};
+复杂度分析：
+时间复杂度：O(n) //二叉树的个数
+空间复杂度：O(n) //二叉树的高度
