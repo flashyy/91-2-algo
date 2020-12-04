@@ -1,0 +1,37 @@
+思路：
+法一：递归
+法二：将前序遍历的顺序倒置。
+代码：
+var postorderTraversal = function(root) {
+    let result = [];
+    
+    var postorder = function(node){
+        if(node){
+            postorder(node.left);
+            postorder(node.right);
+            result.push(node.val);
+        }
+    }
+    postorder(root);
+    return result;
+};
+
+var postorderTraversal = function(root) {
+     let result = [];
+     const s = [];
+     s.push(root);
+     while(s.length !== 0){
+         let node = s.pop();
+         if(!node){
+             continue;
+         }
+         result.push(node.val);
+         s.push(node.left);
+         s.push(node.right);
+     }
+     result = result.reverse();
+     return result;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
