@@ -1,0 +1,45 @@
+思路：
+法一：递归
+法二：将头结点入对列，弹出队中结点，将结点值入结果数组，再将左右孩子结点入队，直到队列为空。
+
+代码：
+var levelOrder = function(root,depth=0,res = []) {
+ if (!root) return [];
+
+    res[depth] || (res[depth] = []);
+    res[depth].push(root.val);
+
+    levelOrder(root.left, depth + 1, res);
+    levelOrder(root.right, depth + 1, res);
+
+    return res;
+};
+
+var levelOrder = function(root) {
+    const result = [];
+    if(!root){
+        return result;
+    }
+
+    const q = [];
+    q.push(root);
+    while(q.length != 0){
+        let level = q.length;
+        result.push([]);
+        for(let i =1;i<=level;i++){
+            const node = q.shift();
+            result[result.length-1].push(node.val);
+            if(node.left){
+                q.push(node.left);
+            }
+            if(node.right){
+                q.push(node.right);
+            }
+        } 
+    }
+    return result;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
