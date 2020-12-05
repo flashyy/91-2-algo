@@ -32,3 +32,7 @@ function reverseList(head){//翻转链表的函数
     }
     return newHead;
 }
+
+复杂度分析：
+时间复杂度：O(n)，其中 n 为链表的长度。head 指针会在 O(n/k) 个结点上停留，每次停留需要进行一次 O(k)的翻转操作。
+空间复杂度：O(1),我们只需要建立常数个变量
