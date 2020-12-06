@@ -1,0 +1,40 @@
+思路：
+设置一个全部元素的最大值的集合，遍历这个集合，与（1<<数组下标）分别求与，如果为真则将数组下标对应的数组放入结果数组。
+代码：
+var subsets = function(nums) {
+    let result = [];
+    let allSet = 1<<nums.length;//设置全部集合的最大值
+    for(let i=0;i<allSet;i++){//遍历所有集合
+        let item = [];
+        for(let j=0;j<nums.length;j++){//构造数字i表示的集合，各元素存储至item
+            if(i & (1<<j)){//整数i代表从0-2^n-1 这2^n个元素,(1<<j)即为构造的nums数组的第j个元素
+                item.push(nums[j]);//若i&(1<<j)为真则nums[j]放入item
+            }
+        }
+        result.push(item);
+    }
+    return result;
+};
+复杂度分析:
+时间复杂度：O(n*2^n) 一共 2^n状态，每种状态需要 O(n) 的时间来构造子集
+空间复杂度：O(n)
+
+思路：
+回溯法
+代码：
+var subsets = function(nums) {
+     let result = [],item = [];
+     backtrack(0,nums,item,result);
+     return result;
+     function backtrack(i,nums,item,result){
+         result.push([...item]);//添加扩展运算符，复制此数组的内容放入结果数组
+         for(let j = i;j<nums.length;j++){//在上一层确定的情况之下，这一层有几种选择，选择最大不超过数组数量的
+             item.push(nums[j]);//将当前的可选的元素第一个加入到数组中
+             backtrack(j+1,nums,item,result);//回溯执行下一层
+             item.pop();//将刚加入的元素取出来
+         }
+     }
+};
+复杂度分析:
+时间复杂度：O(n*2^n) 一共 2^n状态，每种状态需要 O(n) 的时间来构造子集
+空间复杂度：O(n)
