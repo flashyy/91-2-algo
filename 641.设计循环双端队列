@@ -1,0 +1,17 @@
+思路：
+
+
+代码：
+function ListNode(val){
+    this.val = val;
+    this.prev = null;
+    this.next = null;
+}
+var MyCircularDeque = function(k) {
+    let head = new ListNode("head");
+    let last = new ListNode("last");
+    this.head.next = this.next;
+    this.last.prev = this.prev;
+    this.length = 0;
+    this.max = k;
+};
