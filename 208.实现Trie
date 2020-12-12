@@ -1,0 +1,39 @@
+思路：
+相邻字母用哈希表相连，如abc和abd，表示成{a: {b: {c: {isEnd: 1}, d: {isEnd: 1}}}，查找时，层层向里查找
+找单词：找abc顺序a → b → c → isEnd到达末尾，abc在前缀树中
+找前缀：找ab顺序a -> b，isEnd是undefined，ab在前缀树中，是别的单词的前缀
+
+代码：
+var Trie = function() {
+    this.h = {}
+};
+
+Trie.prototype.insert = function(word) {
+    var h = this.h
+    for (var w of word) 
+        !h[w] && (h[w] = {}), h = h[w]
+    h.isEnd = 1;
+};
+
+Trie.prototype.s = function(word) {
+    var h = this.h
+    for (var w of word) {
+        if (!h[w]) 
+            return false;
+        h = h[w]; 
+    }
+    return h;
+}
+
+Trie.prototype.search = function(word, h) {
+    return (h = this.s(word)) && h.isEnd !== undefined;
+};
+
+Trie.prototype.startsWith = function(prefix) {
+    return this.s(prefix) !== false;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
+
