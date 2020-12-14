@@ -1,0 +1,41 @@
+思路：
+使用一个大小为N的p数组，遍历这个图，每个节点我们都遍历所有相邻点，并让相邻点指向它，并设置成一个由p节点决定的单独组。
+这个过程被称为组合。这样每个组都有一个唯一的 p 节点，这些节点的父亲为 -1。对于每对新节点，我们找寻他们的父亲。如果父亲节点一样，那么什么都不做他们已经是一个组里。
+如果父亲不同，说明他们仍然需要合并。因此，将他们的父亲合并，p[p[x]]=p[y]，这样就让他们在一个组里了。
+
+代码：
+var findCircleNum = function(M) {
+     let res = new Array(M.length);
+     res.fill(-1);
+     for(let i=0;i<M.length;i++){
+         for(let j=0;j<M.length;j++){
+            if(M[i][j] === 1 && i !== j){
+                union(res,i,j);
+            }
+         }
+     }
+     let count = 0;
+     for(let i=0;i<res.length;i++){
+         if(res[i] === -1){
+             count++;
+         }
+     }
+     return count;
+};
+function union(p,i,j){
+    let x = find(p,i);
+    let y = find(p,j);
+    if(x !== y){
+       p[x] = y;
+    }
+}
+function find(p,i){
+   if(p[i] === -1){
+       return i;
+   }
+   return find(p,p[i]);
+}
+
+复杂度分许：
+时间复杂度：O(n^3)
+空间复杂度：O(n)
