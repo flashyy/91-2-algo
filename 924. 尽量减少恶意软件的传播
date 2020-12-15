@@ -1,0 +1,183 @@
+思路：
+参考leetcode题解代码，需要消化理解。。
+找出图中所有的连通分量，不同的是这一步用并查集来做，在并查集中会额外计算连通分量的大小，当合并两个连通分量的时候，会把它们的大小进行累加。
+借助并查集，对于 initial 中每个颜色唯一的节点，都去计算连通分量的大小，从中找到最优解。如果 initial 中没有颜色唯一的节点，直接返回 min(initial)。
+
+代码：
+```
+var minMalwareSpread = function (graph, initial) {
+    const len = graph.length;
+    const uf = new UnionFind(len);
+
+    // 得到所有的集合
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            graph[i][j] && uf.unionSet(i, j)
+        }
+    }
+
+    const getGr = (initarr) => {
+        const gr = new Map() // 感染的元
+        // 得到所有感染集合的元
+        for (let i of initarr) {
+            let item = uf.findSet(i);
+            !gr.has(item) && gr.set(item, true)
+        }
+        return gr
+    }
+
+    // 计算元为感染集合内的有多少个节点
+    const js = (map) => {
+        let count = 0;
+        for (let i = 0; i < len; i++) {
+            map.has(uf.findSet(i)) && (count++)
+        }
+        return count
+    }
+
+    let mixall = js(getGr(initial)) // 不删除时候的感染总数
+    let res = initial[0] // 初始化删除索引为0的节点
+    for (let i = 0; i < initial.length; i++) {
+        let tmp = js(getGr([
+            ...initial.slice(0, i),
+            ...initial.slice(i + 1),
+        ]))思路：
+参考leetcode题解代码，需要消化理解。。
+找出图中所有的连通分量，不同的是这一步用并查集来做，在并查集中会额外计算连通分量的大小，当合并两个连通分量的时候，会把它们的大小进行累加。
+借助并查集，对于 initial 中每个颜色唯一的节点，都去计算连通分量的大小，从中找到最优解。如果 initial 中没有颜色唯一的节点，直接返回 min(initial)。
+
+代码：
+```
+var minMalwareSpread = function (graph, initial) {
+    const len = graph.length;
+    const uf = new UnionFind(len);
+
+    // 得到所有的集合
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len; j++) {
+            graph[i][j] && uf.unionSet(i, j)
+        }
+    }
+
+    const getGr = (initarr) => {
+        const gr = new Map() // 感染的元
+        // 得到所有感染集合的元
+        for (let i of initarr) {
+            let item = uf.findSet(i);
+            !gr.has(item) && gr.set(item, true)
+        }
+        return gr
+    }
+
+    // 计算元为感染集合内的有多少个节点
+    const js = (map) => {
+        let count = 0;
+        for (let i = 0; i < len; i++) {
+            map.has(uf.findSet(i)) && (count++)
+        }
+        return count
+    }
+
+    let mixall = js(getGr(initial)) // 不删除时候的感染总数
+    let res = initial[0] // 初始化删除索引为0的节点
+    for (let i = 0; i < initial.length; i++) {
+        let tmp = js(getGr([
+            ...initial.slice(0, i),
+            ...initial.slice(i + 1),
+        ]))
+
+        if (tmp < mixall) {
+            res = initial[i]
+            mixall = tmp // 更新
+        } else if (tmp === mixall) { // 题目不讲武德，我tmd以为是initial的索引最小的节点
+            initial[i] < res && (res = initial[i])
+        }
+    }
+    return res
+};
+
+class UnionFind {
+    constructor(size) {
+        this.parents = Array(size)
+            .fill(0)
+            .map((_, i) => i);
+        this.sizes = Array(size).fill(1);
+    }
+
+    getSizeOfSet(x) {
+        const px = this.findSet(x);
+        return this.sizes[px];
+    }
+
+    findSet(x) {
+        if (x !== this.parents[x]) {
+            this.parents[x] = this.findSet(this.parents[x]);
+        }
+        return this.parents[x];
+    }
+
+    unionSet(x, y) {
+        const px = this.findSet(x);
+        const py = this.findSet(y);
+        if (px === py) return;
+        if (this.sizes[px] > this.sizes[py]) {
+            this.parents[py] = px;
+            this.sizes[px] += this.sizes[py];
+        } else {
+            this.parents[px] = py;
+            this.sizes[py] += this.sizes[px];
+        }
+    }
+}
+```
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n^2)
+
+        if (tmp < mixall) {
+            res = initial[i]
+            mixall = tmp // 更新
+        } else if (tmp === mixall) { // 题目不讲武德，我tmd以为是initial的索引最小的节点
+            initial[i] < res && (res = initial[i])
+        }
+    }
+    return res
+};
+
+class UnionFind {
+    constructor(size) {
+        this.parents = Array(size)
+            .fill(0)
+            .map((_, i) => i);
+        this.sizes = Array(size).fill(1);
+    }
+
+    getSizeOfSet(x) {
+        const px = this.findSet(x);
+        return this.sizes[px];
+    }
+
+    findSet(x) {
+        if (x !== this.parents[x]) {
+            this.parents[x] = this.findSet(this.parents[x]);
+        }
+        return this.parents[x];
+    }
+
+    unionSet(x, y) {
+        const px = this.findSet(x);
+        const py = this.findSet(y);
+        if (px === py) return;
+        if (this.sizes[px] > this.sizes[py]) {
+            this.parents[py] = px;
+            this.sizes[px] += this.sizes[py];
+        } else {
+            this.parents[px] = py;
+            this.sizes[py] += this.sizes[px];
+        }
+    }
+}
+```
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n^2)
