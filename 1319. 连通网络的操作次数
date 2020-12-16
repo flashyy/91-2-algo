@@ -1,0 +1,32 @@
+思路：计算联通分量，最小操作次数就是将联通分量链接的次数。
+代码：
+var makeConnected = function(n, connections) {
+    if (connections.length < n - 1) {
+        return -1;
+    }
+    let father = Array.from({ length: n }, (v, i) => i);
+    let count = n;
+    for (let connection of connections){
+        union(...connection);
+    }
+    return count - 1;
+
+  function find(v) {
+    if (father[v] !== v) {
+      father[v] = find(father[v]);
+    }
+    return father[v];
+  }
+
+  function union(x, y) {
+    if (find(x) !== find(y)) {
+      count--;
+      father[find(x)] = find(y);
+    }
+  }
+
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
