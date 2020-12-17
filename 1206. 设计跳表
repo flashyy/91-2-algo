@@ -1,0 +1,70 @@
+思路：
+http://zhangtielei.com/posts/blog-redis-skiplist.html  看了这个之后理解了。
+代码：
+function Node(val, next = null, down = null) {//创建相应的数据结构
+  this.val = val;
+  this.next = next;
+  this.down = down;
+}
+
+var Skiplist = function() {
+  this.head = new Node(null);//创建跳表头部
+};
+
+/** 
+ * @param {number} target
+ * @return {boolean}
+ */
+Skiplist.prototype.search = function(target) {
+   let node = this.head;
+   while(node){
+       while(node.next && node.next.val<target){
+          node = node.next;
+       }
+       if(!node.next || node.next.val > target){
+           node = node.down;
+       }
+       else{
+           return true;
+       }
+   }
+   return false;
+};
+
+/** 
+ * @param {number} num
+ * @return {void}
+ */
+Skiplist.prototype.add = function(num) {
+    const stack = [];
+    let cur = this.head;
+  // 用一个栈记录每一层可能会插入的位置
+    while (cur) {
+        while (cur.next && cur.next.val < num) {
+            cur = cur.next;
+        }
+        stack.push(cur);
+        cur = cur.down;
+  }
+
+  // 用一个标志位记录是否要插入，最底下一层一定需要插入(对应栈顶元素)
+    let isNeedInsert = true;
+    let downNode = null;
+    while (isNeedInsert && stack.length) {
+        let pre = stack.pop();
+        // 插入元素，维护 next/down 指针
+        pre.next = new Node(num, pre.next, downNode);
+        downNode = pre.next;
+        // 抛硬币确定下一个元素是否需要被添加
+        isNeedInsert = Math.random() < 0.5;
+  }
+
+  // 如果人品好，当前所有层都插入了改元素，还需要继续往上插入，则新建一层，表现为新建一层元素
+  if (isNeedInsert) {
+    this.head = new Node(null, new Node(num, null, downNode), this.head);
+  }
+};
+
+复杂度分析：
+时间复杂度：O(log(n))
+空间复杂度：O(n)
