@@ -65,6 +65,37 @@ Skiplist.prototype.add = function(num) {
   }
 };
 
+/** 
+ * @param {number} num
+ * @return {boolean}
+ */
+Skiplist.prototype.erase = function(num) {
+   let node = this.head;
+   let exist = false;
+   while(node){
+       while(node.next && node.next.val < num){
+           node = node.next;
+       }
+       if(!node.next || node.next.val >num){
+           node = node.down;
+       }
+       else{
+           exist = true;
+           node.next = node.next.next;
+           node = node.down;
+       }
+   }
+   return exist;
+};
+
+/**
+ * Your Skiplist object will be instantiated and called as such:
+ * var obj = new Skiplist()
+ * var param_1 = obj.search(target)
+ * obj.add(num)
+ * var param_3 = obj.erase(num)
+ */
+
 复杂度分析：
 时间复杂度：O(log(n))
 空间复杂度：O(n)
