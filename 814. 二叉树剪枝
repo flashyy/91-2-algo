@@ -1,0 +1,18 @@
+思路：
+先写出递归出口，之后对当前结点的左右子树分别递归判断是否需要剪枝并且返回相应的结果，加入条件判断返回给上一层的结果。如果不符合相应条件，则返回当前结点。
+代码：
+
+var pruneTree = function(root) {
+     if(!root){//程序出口
+         return null;
+     }
+     root.left = pruneTree(root.left);
+     root.right = pruneTree(root.right);
+     if(!root.left && !root.right && root.val === 0){//去掉值为0的叶节点
+         return null;
+     }
+     return root;//返回结果
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(h)//树的最大高度，递归栈空间大小
