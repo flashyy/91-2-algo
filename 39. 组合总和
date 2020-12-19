@@ -1,0 +1,25 @@
+思路：
+利用回溯的方式对数组进行处理，注意的问题是每个数字可以被无限制重复选取，因此搜索的下标仍为j，还有就是剪枝的条件是target值已经小于0，将这一枝剪去。
+代码：
+var combinationSum = function(candidates, target) {
+     let result = [];
+     backtrack(candidates,target,[],0,result);
+     return result;
+};
+function backtrack(candidates,target,item,i,result){
+      if(target === 0){
+          result.push([...item]);
+      }
+      if(target <0){//剪枝
+          return;
+      }
+      for(let j=i;j<candidates.length;j++){
+          item.push(candidates[j]);
+          backtrack(candidates,target-candidates[j],item,j,result);//可以从刚选过的数字中再选一个
+          item.pop();
+      }
+}
+
+复杂度分析：
+时间复杂度：O(S)可行解的长度之和
+空间复杂度：O(target)
