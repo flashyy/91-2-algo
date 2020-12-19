@@ -1,0 +1,29 @@
+思路：
+对给定数组的全排列，设置一个访问数组，如果访问过该数字了，那么就将访问数组的确定标志位标为1，之后对数组进行回溯处理，对标志位置为1的对应数字跳过不访问，对标志位为0的数字标为1后，
+将其放入中间数组，之后又对其回溯处理，将其标志位置为0之后，将其从中间数组中取出。判断出口的条件是中间数组的长度等于给出数组的长度。
+
+代码：
+var permute = function(nums) {
+   let result = [];
+   backtrack([],nums,[],result);
+   return result;
+};
+function backtrack(visited,nums,item,result){
+    if(nums.length === item.length){
+        result.push([...item]);
+    }
+    for(let i=0;i<nums.length;i++){
+        if(visited[i] === 1){
+            continue;
+        }
+        visited[i] = 1;
+        item.push(nums[i]);
+        backtrack(visited,nums,item,result);
+        visited[i] = 0;
+        item.pop();
+    }
+}
+
+复杂度分析：
+时间复杂度：O(n*n!)
+空间复杂度：O(n)
