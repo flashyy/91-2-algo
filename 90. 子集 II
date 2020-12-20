@@ -1,0 +1,45 @@
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+说明：解集不能包含重复的子集。
+示例:
+输入: [1,2,2]
+输出:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/subsets-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+思路：
+题目不是要求单个子集中包含所有元素，所以思路和之前求子集相同，利用回溯，层层递进。需要加上的剪枝条件是当前访问的元素和前一位访问的元素不同。
+
+代码：
+var subsetsWithDup = function(nums) {
+    let result = [],item = [];
+    nums=nums.sort((a,b)=>a-b);
+    backtrack(0,nums,item,result);
+    return result;
+ 
+    function backtrack(i,nums,item,result){
+        result.push([...item]);
+        for(let j = i;j<nums.length;j++){
+            //console.log(i,j);
+            if(nums[j] === nums[j-1]&&j>i){//和前一位数字相同的数字就不进行选择了，但是直接进行的话会多剪枝，所以要这一位保证都加入的前提下在进行剪枝                
+                 continue;
+            }
+            item.push(nums[j]);
+            backtrack(j+1,nums,item,result);
+            item.pop();
+        }
+    }
+};
+
+复杂度分析：
+时间复杂度：O(n * 2^n) 一共 2^n个状态，每种状态需要 O(n)O(n) 的时间来构造子集。
+空间复杂度：O(n) 临时数组 t 的空间代价是 O(n)，递归时栈空间的代价为 O(n)。
