@@ -1,0 +1,33 @@
+思路：
+总体思路和全排列的相同，但是由于要剪枝（判断现在读取的这个数和数组前一位是否相等），所以要提前排好序，剪枝的条件是是否访问过当前访问元素的前一位元素，如果访问过，
+则看当前元素和前一位元素是否相等，满足上述两个条件则剪去此枝。
+代码：
+var permuteUnique = function(nums) {
+    let result = [];
+    nums.sort((a,b)=>{ return a-b;});
+    backtrack([],nums,[],result);
+    return result;
+};
+function backtrack(visited,nums,item,result){
+    if(nums.length === item.length){
+        console.log(item);
+        result.push([...item]);
+    }
+    for(let i=0;i<nums.length;i++){
+        if(visited[i] === 1){
+            continue;
+        }
+        if(visited[i-1] === 1 && nums[i-1] === nums[i] && i>=1){//剪枝条件
+            continue;
+        }
+        visited[i] = 1;
+        item.push(nums[i]);
+        backtrack(visited,nums,item,result);
+        visited[i] = 0;
+        item.pop();
+    }
+}
+
+复杂度分析：
+时间复杂度：对于 backtrack 调用的每个叶结点（最坏情况下没有重复数字共 n!个），我们需要将当前答案使用 O(n) 的时间复制到答案数组中，相乘得时间复杂度为 O(n*n!)
+空间复杂度：O(n)//树的高度
