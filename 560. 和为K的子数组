@@ -1,0 +1,26 @@
+思路：
+将前缀和作为map当中属性，属性值为多少这个大小的前缀和，对数组循环，给map添加或者修改前缀和，判断是否存在pre-k的num值，如果有就增加。
+代码：
+var subarraySum = function(nums, k) {
+   let mp = new Map();
+   mp.set(0,1);
+   let pre = 0,res = 0;
+   for(let num of nums){
+       pre += num;
+       if(mp.has(pre-k)){
+           res += mp.get(pre-k);
+       }
+       if(mp.has(pre)){
+           mp.set(pre,mp.get(pre)+1);
+       }
+       else{
+           mp.set(pre,1);
+       }
+   }
+   return res;
+};
+
+复杂度分析：
+
+时间复杂度：O(n)
+空间复杂度：O(n)
