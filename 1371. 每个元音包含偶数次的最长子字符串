@@ -1,0 +1,101 @@
+利用前缀和和剪枝的方式
+思路：
+设置一个二维数组，行数是字符串的长度来表示指针到每一行的状态，列数为5表示每个元音字母的具体个数，遍历字符串，更新每一行的元音字母数，遇到奇数不用更新。双层循环，
+外层从最长处开始检查字符串，内层从0开始，元音状态相减是偶数的话就是要找的长度。
+
+代码：
+var findTheLongestSubstring = function(s) {
+   let len = s.length;
+   let preSum = new Array(len).fill(0).map((item)=>{
+       return new Array(5).fill(0)
+   });
+
+   let first = getIndex(s.charAt(0));
+   if(first !== -1){
+       preSum[0][first]++;
+   }
+   for(let i=1;i<len;i++){
+       let id = getIndex(s.charAt(i));
+       for(let j=0;j<5;j++){
+           if(id === j){
+               preSum[i][j] = preSum[i-1][j]+1;
+           }
+           else{
+               preSum[i][j] = preSum[i-1][j];
+           }
+       }
+   }
+   console.log(preSum);
+
+   for(let i=len-1;i>=0;i--){
+       for(let j=0;j<len-i;j++){
+        if(checkVaild(preSum,s,j,i+j)){
+            return i+1;
+        }
+       }
+   };
+   return 0;
+};
+function checkVaild(preSum,s,left,right){
+    let idx =  getIndex(s.charAt(left));     
+    for(let i=0;i<5;i++){
+        if(((preSum[right][i] - preSum[left][i] + (idx===i?1:0))&1) === 1){
+            return false;
+        }
+    }
+    return true;
+}
+function getIndex(word){
+    if(word === "a"){
+        return 0;
+    }
+    else if(word === "e"){
+        return 1;
+    }
+    else if(word === "i"){
+        return 2;
+    }
+    else if(word === "o"){
+        return 3;
+    }
+    else if(word === "u"){
+        return 4;
+    }
+    else{
+        return -1;
+    }
+}
+
+复杂度分析：
+时间复杂度：O(n^2)//由于是双层循环
+空间复杂度：O(n)
+
+利用前缀和+状态压缩：
+利用 00001表示“a”  00010 表示"e" 00100 表示状态"i"  01000表示状态"o"  10000表示"u"
+利用中间变量表示状态的变化，由于两个奇偶性相同的数相减是偶数，奇偶性不同的数相减是奇数，两个数做异或得出前后某两个状态相同，说明增加了偶数个元音。
+求其中长度最大的。
+代码：
+var findTheLongestSubstring = function(s) {
+     let wordMap = {
+         "a":1<<0, "e":1<<1,"i":1<<2,"o":1<<3,"u":1<<4
+     };
+     let pre ={
+         0:-1
+     }
+     let res = cur = 0;
+     for(let i=0;i<s.length;i++){
+         if(wordMap[s[i]] !== undefined){
+             cur ^= wordMap[s[i]];
+         }
+         if(pre[cur] !== undefined){
+             res = Math.max(res,i-pre[cur]);
+         }
+         else{
+             pre[cur] = i;
+         }
+     }
+     return res;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
