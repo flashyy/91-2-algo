@@ -1,0 +1,29 @@
+思路：
+暴力法
+代码：
+var strStr = function(haystack, needle) {
+    if(needle.length === 0){
+        return 0;
+    }
+    let n=needle.length,m=haystack.length;
+    let pm=0
+    while(pm<m-n+1){
+         while(pm<m-n+1 && haystack[pm] !== needle[0]){
+             pm++;
+         }
+         let pn=0,currentLen = 0;
+         while(pm<m && pn<n && haystack[pm] === needle[pn]){
+             pn++;
+             pm++;
+             currentLen++;
+         }
+         if(currentLen === n){
+             return pm-n;
+         }
+         pm = pm-currentLen+1;//回溯到开始匹配的位置+1处
+    }
+    return -1;
+};
+复杂度分析：
+时间复杂度：O((N−L)L)，其中 N 为 haystack 字符串的长度，L 为 needle 字符串的长度。内循环中比较字符串的复杂度为 L，总共需要比较 (N - L) 次。
+空间复杂度：O(1)
