@@ -1,0 +1,78 @@
+思路：
+每个Trie结点有两个属性，一个是是否结束的标识符，一个是含有26位的数组，在其中一位的属性值是该结点下一位的Trie结点。如果一个单词结束的话就将这个单词结尾的那个单词的isEnd属性
+标为true。
+
+代码：
+var Trie = function() {
+     this.root = new TrieNode();
+};
+function TrieNode(){
+    this.next = new Map();
+    this.isEnd = false;
+}
+/**
+ * Inserts a word into the trie. 
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function(word) {
+    let node = this.root;
+    for(let letter of word){
+        if(!node.next.has(letter)){
+            node.next.set(letter,new TrieNode());
+        }
+        node = node.next.get(letter);
+    }
+    node.isEnd = true;
+};
+
+/**
+ * Returns if the word is in the trie. 
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function(word) {
+     let node = this.root;
+     for(let letter of word){
+         if(!node.next.has(letter)){
+             return false;
+         }
+         node = node.next.get(letter);
+     }
+     return node.isEnd;
+};
+
+/**
+ * Returns if there is any word in the trie that starts with the given prefix. 
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function(prefix) {
+      let node = this.root;
+      for(let letter of prefix){
+          if(!node.next.has(letter)){
+              return false;
+          }
+          node = node.next.get(letter);
+      }
+      return true;
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
+ 
+ 复杂度分析：
+ 向Trie树中插入键
+时间复杂度：O(m)//字符串长度
+空间复杂度：O(m)
+在 Trie 树中查找键
+时间复杂度：O(m)//字符串长度
+空间复杂度：O(1)
+查找 Trie 树中的键前缀
+时间复杂度：O(m)//字符串长度
+空间复杂度：O(1)
