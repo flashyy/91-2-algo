@@ -1,0 +1,63 @@
+思路：
+插入：构建一个Trie树，对每一个插入进来的key进行存储，到存储到最后一个字母的时候，加入val元素，作为这个key的属性值。
+求和：找出给出前缀的最后一个结点，之后对其之后的所有的Trie结点进行递归相加所有的以这个prefix为前缀的key值的val和。
+代码：
+/**
+ * Initialize your data structure here.
+ */
+var MapSum = function() {
+    this.root = new TrieNode();
+};
+function TrieNode(){
+    this.next = new Map();
+    this.val = 0;
+}
+/** 
+ * @param {string} key 
+ * @param {number} val
+ * @return {void}
+ */
+MapSum.prototype.insert = function(key, val) {
+    let node = this.root;
+    for(let word of key){
+        if(!node.next.has(word)){
+            node.next.set(word,new TrieNode());
+        }
+        node = node.next.get(word);
+    }
+    node.val = val;
+};
+/** 
+ * @param {string} prefix
+ * @return {number}
+ */
+MapSum.prototype.sum = function(prefix) {
+    let node = this.root;
+    for(let word of prefix){
+        if(!node.next.has(word)){
+            return 0;
+        }
+        node = node.next.get(word);
+    }
+    return dfs(node);
+};
+function dfs(root){
+    let sum = 0;
+    let node = root.next;
+    for(let node of root.next.values()){
+        if(node){
+            sum += dfs(node);
+        }
+    }
+    return sum + root.val;
+}
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * var obj = new MapSum()
+ * obj.insert(key,val)
+ * var param_2 = obj.sum(prefix)
+ */
+ 复杂度分析：
+ 时间复杂度：O(k)//key的长度
+ 空间复杂度：O(n)//取决于插入多少数据
