@@ -12,7 +12,7 @@
    }
 
    var Trie = function () {
-     this.root = new  TreeNode();
+     this.root = new TreeNode();
      this.count = 0; //记录字符串的个数，用来给字符串节点标记次序
    }
 
@@ -36,12 +36,12 @@
      for (let  i=0;i<word.length;i++){
        if (!node.children[word[i]]){
          node = node.children[word[i]];
-       }else
-       {
+       }
+       else{
          return  false;
        }
      }
-     return  node.isword;
+     return node.isword;
    }
  
    Trie.prototype.startsWith = function(prefix) {
@@ -50,8 +50,8 @@
      for (let  i =0;i <prefix.length;i++){
        if (node.children[prefix[i]]){
          node = node.children[prefix[i]];
-       }else
-       {
+       }
+       else{
          return  false;
        }
      }
@@ -60,17 +60,16 @@
 
    var multiSearch = function(big, smalls) {
      let  result = Array(smalls.length).fill(0).map(()=>[]); //预生成数组
-     let maxLength = Math.max(...smalls.map(small=> small.length)); //计算smalls中字符串的最大长度
+     let maxLength = Math.max(...smalls.map(small => small.length)); //计算smalls中字符串的最大长度
      let trie = new Trie(); //预建trie树
      //将smalls 字符串插入树中
      for (let i=0;i< smalls.length;i++){
        trie.insert(smalls[i]);
      }
-
      for (let i=0;i<big.length;i++){
        if(!trie.startsWith(big[i])) continue; //查找是否以 big[i] 开头的字符串，没有则跳过本次执行
        let str = big.slice(i,i+maxLength); 
-       let  node = trie.root;
+       let node = trie.root;
        for (let j=0;j<str.length;j++)
        {
          let  jchar = str[j];
@@ -90,3 +89,54 @@
 复杂度分析：
 时间复杂度：O(n^2)
 空间复杂度：O(n)
+
+思路：
+将smalls中的短的字符字符串插入Trie树中，同时将每个单词在smalls中数组下标的位置在结点中记录下来。
+创建一个二维数组，双重循环在big中找出单词，并将其起始点记录在Trie树结点记录下的下标对应数组下面。
+
+代码：
+function TrieNode(){
+    this.next = new Map();
+    this.isEnd = false;
+    this.id = 0;
+}
+var multiSearch = function(big, smalls) {
+    this.root = new TrieNode();
+    let len = smalls.length;
+    let result = new Array(len).fill(0).map(()=>{ 
+        return [];
+    });
+    //console.log(result);
+    for(let i=0;i<smalls.length;i++){
+        insert(smalls[i],i);
+    }
+    for(let i=0;i<big.length;i++){
+        let node =this.root;
+        for(let j=i;j<big.length;j++){
+            if(!node.next.has(big[j])){
+                break;
+            }
+            node = node.next.get(big[j]);
+            if(node.isEnd){
+                result[node.id].push(i);
+            }
+        }
+    }
+    return result;
+    
+    function insert(word,index){
+        let node = this.root;
+        for(let letter of word){
+            if(!node.next.has(letter)){
+                node.next.set(letter,new TrieNode());
+            }
+            node = node.next.get(letter);
+        }
+        node.isEnd = true;
+        node.id = index;
+    }
+};
+
+复杂度分析：
+时间复杂度：O(N*K)，其中 K 是敏感词中最长单词长度，N 是长句的长度。
+空间复杂度：O(S), S 为所有匹配成功的位置的个数
