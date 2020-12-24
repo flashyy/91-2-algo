@@ -1,0 +1,41 @@
+思路：
+基于堆排序的方法，建立一个大根堆，做k-1次删除之后，堆顶的元素就是答案。
+一般从堆中做删除操作的时候，需要将下沉元素与左右节点比较，如果当下沉节点小于左右子节点，就将下沉节点与子节点交换位置，不断重复操作，直至下沉节点移到正确的位置。
+代码：
+var findKthLargest = function(nums, k) {
+    let heapSize = nums.length;
+    buildHeap(nums,heapSize);
+    for(let i=nums.length-1;i>=nums.length-k+1;i--){
+        swap(nums,0,i);
+        --heapSize;
+        down(nums,0,heapSize);
+    }
+    return nums[0];
+};
+function buildHeap(nums,heapSize){
+    for(let i=parseInt(heapSize/2);i>=0;i--){
+        down(nums,i,heapSize);
+    }
+}
+function down(nums,index,heapSize){
+    let leftSon = 2*index,rightSon = 2*index+1,large = index;
+    if(leftSon<heapSize&&nums[large]<nums[leftSon]){
+         large = leftSon;
+    }
+    if(rightSon<heapSize&&nums[large]<nums[rightSon]){
+         large = rightSon;
+    }
+    if(large != index){
+        swap(nums,large,index);
+        down(nums,large,heapSize);
+    }
+}
+function swap(arr,from,to){
+    let temp = arr[from];
+    arr[from] = arr[to];
+    arr[to] = temp;
+}
+
+复杂度分析：
+时间复杂度：O(nlogn) //建堆的时间代价是 O(n)，删除的总代价是 O(klogn)，因为 k<n，故渐进时间复杂为 O(n + k*log n) =O(nlogn)。
+空间复杂度：O(logn) //递归使用栈空间的空间代价
