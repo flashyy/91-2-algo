@@ -1,0 +1,24 @@
+思路：
+利用优先级队列。
+每次取出前两个（前提size≥2）进行判断，若重量相同，则抛弃，否则将重量差入堆。
+当堆中元素不足2个则停止并返回相应结果。
+代码：
+class Solution {
+public:
+    int lastStoneWeight(vector<int>& stones) {
+        priority_queue<int> pq;
+        for(int v : stones) pq.push(v);
+        while(pq.size() >= 2){
+            int top1 = pq.top(); 
+            pq.pop();
+            int top2 = pq.top(); 
+            pq.pop();
+            int v = top1 - top2;
+            pq.push(v);
+        }
+        return pq.top();
+    }
+};
+复杂度分析：
+时间复杂度：O(N*logN)
+空间复杂度：O(N)
