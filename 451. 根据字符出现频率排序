@@ -1,0 +1,25 @@
+思路：
+将字符串的每个字母利用map进行统计，之后对其value值进行排序将结果放入到另一个map中，利用双循环将答案输出。
+代码：
+var frequencySort = function(s) {
+    let wordMap = new Map();
+    let res = '';
+    for(let word of s){
+        if(!wordMap.has(word)){
+            wordMap.set(word,1);
+        }
+        else{
+            wordMap.set(word,wordMap.get(word)+1);
+        }
+    }
+    let map = new Map([...wordMap].sort((a,b)=>{ return b[1]-a[1]}));
+    for(let [key,values] of map.entries()){
+        for(let i=0;i<values;i++){
+            res+=key;
+        }
+    }
+    return res;
+};
+复杂度分析：
+时间复杂度：O(n^2)
+空间复杂度：O(2*n)
