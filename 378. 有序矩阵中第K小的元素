@@ -1,0 +1,33 @@
+思路：
+这个矩阵内的元素是从左上到右下递增的（假设矩阵左上角为matrix[0][0]）。matrix[0][0] 为最小值，matrix[n−1][n−1] 为最大值，现在我们将其分别记作 low 和 high。
+可以发现一个性质：任取一个数 mid 满足 low≤mid≤high，那么矩阵中不大于mid的数，肯定全部分布在矩阵的左上角。
+初始位置在 matrix[n - 1][0]matrix[n−1][0]（即左下角）；
+设当前位置为 matrix[i][j]matrix[i][j]。若 matrix[i][j]<= mid，则将当前所在列的不大于 mid 的数的数量累加到答案中，并向右移动，否则向上移动；
+不断移动直到走出格子为止。
+如果数量不少于 k，那么说明最终答案 x 不大于 mid；
+如果数量少于 k，那么说明最终答案 x 大于 mid。
+代码：
+var kthSmallest = function(matrix, k) {
+     let m = matrix.length,n = matrix[0].length;
+     let low = matrix[0][0],high = matrix[m-1][n-1]; 
+     while(low <= high){
+         let count = 0;
+         let mid = low+parseInt((high-low)/2);
+         for(let i=0;i<m;i++){
+             for(let j=0;j<n&&matrix[i][j]<=mid;j++){
+                 count++;
+             }
+         }
+         if(count < k){
+             low = mid+1;
+         }
+         else{
+             high = mid-1;
+         }
+     }
+     return low;
+};
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
