@@ -1,0 +1,19 @@
+思路：
+收缩左右边界找到最大值
+代码：
+var findPeakElement = function(nums) {
+     let left = 0,right = nums.length-1;
+     while(left < right){
+         let mid = parseInt((left+right)/2);
+         if(nums[mid] > nums[mid+1]){
+             right = mid;
+         }
+         else{
+            left = mid+1;
+         }
+     }
+     return left;
+};
+复杂度分析
+时间复杂度：O(logN)
+空间复杂度：O(1)
