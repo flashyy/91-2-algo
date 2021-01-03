@@ -23,5 +23,5 @@ var searchMatrix = function(matrix, target) {
      return false;
 };
 复杂度分析：
-时间复杂度：O(log(mn))
+时间复杂度：O(log(mn)) -> 不正确   正确答案：最坏的情况是只有一行或者只有一列，此时时间复杂度为 $$O(M * N)$$。更多的情况下时间复杂度为 $$O(M + N)$$
 空间复杂度：O(1)
