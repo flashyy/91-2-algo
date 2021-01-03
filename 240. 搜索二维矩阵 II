@@ -1,0 +1,28 @@
+思路：
+选择左下角元素作为起始点Q
+如果Q>target,下方和右方的元素没必要看了
+如果Q<target,上方和左方的元素没必要看了
+如果 Q == target ，直接 返回 True
+交回了都找不到，返回 False
+
+代码：
+var searchMatrix = function(matrix, target) {
+    let m = matrix.length,n = matrix[0].length;
+    let x = m-1,y=0;
+    while(x>=0 && y<n){
+        if(matrix[x][y] < target){
+            y++;
+        }
+        else if(matrix[x][y] > target){
+            x--;
+        }
+        else{
+            return true;
+        }
+    }
+    return false;
+};
+
+复杂度分析：
+时间复杂度：最坏的情况是只有一行或者只有一列，此时时间复杂度为 $$O(M * N)$$。更多的情况下时间复杂度为 $$O(M + N)$$
+空间复杂度：$$O(1)$$
