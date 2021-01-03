@@ -23,5 +23,34 @@ var searchMatrix = function(matrix, target) {
      return false;
 };
 复杂度分析：
-时间复杂度：O(log(mn)) -> 不正确   正确答案：最坏的情况是只有一行或者只有一列，此时时间复杂度为 $$O(M * N)$$。更多的情况下时间复杂度为 $$O(M + N)$$
+时间复杂度：O(log(mn))   
+空间复杂度：O(1)
+
+
+思路：
+选择矩阵右上角元素作为起始元素q
+如果q<target,到下一行寻找元素（左方和上方的元素没有必要看了）
+如果q>target,在当前行向左边寻找元素(向下和向右的元素都没必要看了)
+
+代码：
+var searchMatrix = function(matrix, target) {
+   let m = matrix.length;
+   let n = matrix[0].length;
+   let x = 0, y = n-1;
+   while(x<m && y>=0){
+       if(matrix[x][y] < target){
+           x++;
+       }
+       else if(matrix[x][y] > target){
+           y--;
+       }
+       else{
+           return true;
+       }
+   }
+   return false;
+};
+
+复杂度分析：
+时间复杂度：最坏的情况是只有一行或者只有一列，此时时间复杂度为 $$O(M * N)$$。更多的情况下时间复杂度为 $$O(M + N)$$
 空间复杂度：O(1)
