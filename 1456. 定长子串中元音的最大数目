@@ -1,0 +1,33 @@
+思路：
+将元音字母放入set中，之后对字符串s进行遍历，将窗口的大小设置为k,如果遇到元音字母则临时答案值加1，如果窗口长度变大则缩小窗口同时将窗口之外元音字母从临时答案中减去，
+最后和result比较大小，取最大的值。
+代码：
+var maxVowels = function(s, k) {
+    if(s.length < k || s === null){
+        return 0;
+    }
+     let vowelsMap = new Set();
+     vowelsMap.add("a");
+     vowelsMap.add("e");
+     vowelsMap.add("i");
+     vowelsMap.add("o");
+     vowelsMap.add("u");
+     //console.log(vowelsMap);
+     let result = 0,i=0,tmp = 0;
+     for(let j=0;j<s.length;j++){
+         if(vowelsMap.has(s[j])){
+            tmp++;
+         }
+         if(j>=k){
+             if(vowelsMap.has(s[j-k])){
+                 tmp--;
+             }
+         }
+         result = Math.max(result,tmp);
+     }
+     return result;
+};
+
+复杂度分析：
+时间复杂度：O(n) //s的长度
+空间复杂度：O(1)
