@@ -1,0 +1,44 @@
+- 思路：
+
+排序，之后在其中找下标和其对应数组位置不等的数字
+
+- 代码：
+
+```
+var missingNumber = function(nums) {
+      nums.sort((a,b)=>{ return a-b;});
+      //console.log(nums);
+      if(nums[nums.length-1] != nums.length){  return nums.length }
+      return nums.findIndex((item,index)=>{
+            return item != index;
+      });
+};
+```
+
+- 复杂度分析：
+
+时间复杂度：O(nlogn)
+空间复杂度：O(1)
+
+- 思路：
+
+利用位运算的方式
+
+- 代码：
+
+```
+var missingNumber = function(nums) {
+    let n = nums.length;
+    let result = n;
+    for(let i=0;i<nums.length;i++){
+        result ^= nums[i];
+        result ^= i;
+    }
+    return result;
+};
+```
+
+- 复杂度分析：
+
+时间复杂度：O(n)
+空间复杂度：O(1)
