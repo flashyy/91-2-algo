@@ -1,0 +1,77 @@
+思路：
+1.设置两个字符哈希数组，map_s和map_t, map_s代表当前处理的窗口区间中的字符数量，map_t代表子串T的字符数量。
+2.设置两个指针(记作指针i与指针begin)指向字符串第一个字符。
+3.i指针向后逐个扫描字符串中的字符，在这个过程中，循环检查begin指针可以向前移动：
+如果当前begin指向的字符中没有出现，直接前移begin;
+如果begin指向的字符T中出现了，但是当前窗口中该字符数量足够向前移动，并且更新map_s;
+否则不能移动begin,跳出检查。
+4.指针i每向前扫描一个字符，即检查一下是否可以更新最新最终结果（找到最小的包含T中各个字符的窗口）。
+在整个过程中，使用begin与i维护一个窗口，该窗口中的子串满足题目条件（包含T中所有字符），窗口线性向前滑动，整体时间复杂度为O(n)
+
+代码：
+var minWindow = function(s, t) {
+
+    let map_s = new Map();
+    let map_t = new Map();
+    for(let i=0;i<t.length;i++){
+        if(!map_t.has(t[i])){
+             map_t.set(t[i],1);
+        }else{
+             map_t.set(t[i],map_t.get(t[i])+1); 
+        }
+    }
+    //console.log(map_t);
+
+    let array_t = [];
+    for(let item of map_t.keys()){
+        if(map_t.get(item) > 0){
+             array_t.push(item);
+        }
+    }
+    //console.log(array_t);
+    let window_begin =0;
+    let result = "";
+    for(let i=0;i<s.length;i++){
+        if(!map_s.has(s[i])){
+            map_s.set(s[i],1);
+        }
+        else if(map_s.has(s[i])){
+            map_s.set(s[i],map_s.get(s[i])+1);
+        }
+     //console.log(map_s);
+        while(window_begin<i){
+            let word = s[window_begin];
+                //console.log(word);
+                if(!map_t.has(word)){
+                    window_begin++;
+                }
+                else if(map_s.get(word) > map_t.get(word)){
+                    map_s.set(word, map_s.get(word)-1);
+                    window_begin++;
+                }   
+                else{
+                    break;
+                }
+        }
+        if(is_Window_ok(map_s,map_t,array_t)){
+            let new_window_len = i-window_begin+1;          
+            if(result == "" || result.length > new_window_len){
+                result = s.slice(window_begin, window_begin+new_window_len);
+            }  
+            //console.log(result);
+         }
+     }
+      return result;
+};
+function is_Window_ok(map_s,map_t,array_t){
+   for(let i=0;i<array_t.length;i++){
+      if(!map_s.has(array_t[i]) || map_s.get(array_t[i])<map_t.get(array_t[i])){
+         return false;
+      }
+   }
+   return true;
+}
+
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
