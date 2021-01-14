@@ -28,3 +28,33 @@ class Solution {
 复杂度分析：
 时间复杂度：O(12*60)
 空间复杂度：O(n)
+
+思路：
+利用回溯的方式
+代码：
+var readBinaryWatch = function(num) {
+   let result = new Array();
+   backtrack(num,0,0,1,1,[],[],result);
+   return result;
+};
+ function backtrack(num,h,m,hi,mi,hours,minutes,result){
+    if(hours.length + minutes.length === num){
+        if(h<12&&m<60){
+            let a = m<10 ? h+":0"+m : h+":"+m;
+            result.push(a);
+        }
+    }
+    for(let i=hi;i<=8;i<<=1){
+        hours.push(i);
+        backtrack(num,h+i,m,i<<1,mi,hours,minutes);
+        hours.pop();
+    }
+    for(let i=mi;i<=32;i<<=1){
+        minutes.push(i);
+        backtrack(num,h,m+i,16,i<<1,hours,minutes);
+        minutes.pop();
+    }
+}
+复杂度分析：
+时间复杂度：O()
+空间复杂度：O(h) 递归树的高度
