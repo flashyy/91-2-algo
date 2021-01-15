@@ -1,0 +1,32 @@
+思路：
+从图中某个顶点出发，首先访问该顶点，然后依次从它的各个未被访问的邻接点出发深度搜索遍历图，直至图中所有和顶点有路径想通且未被访问都被访问到，若此时尚有其他顶点未被访问的顶点
+都被访问到。若此时尚有其他顶点未被访问到，则选一个未被访问的顶点作起始点，重复上述过程，直至图中所有顶点都被访问到为止。
+代码：
+var maxAreaOfIsland = function(grid) {
+    let x = grid.length, y = grid[0].length
+    let max = 0
+    for(let i=0;i<x;i++){
+        for(let j =0;j<y;j++){
+            if(grid[i][j]==1){
+                max = Math.max(max,countArea(grid,i,j,x,y))
+            }
+        }
+    }
+    return max;
+};
+function countArea(grid,i,j,x,y){
+    if(i<0 || i>=x || j<0 || j>=y || grid[i][j]==0){
+        return 0;
+    }     
+    let cnt = 1
+    grid[i][j] = 0
+    cnt += countArea(grid, i+1, j, x, y);
+    cnt += countArea(grid, i-1, j, x, y);
+    cnt += countArea(grid, i, j+1, x, y);
+    cnt += countArea(grid, i, j-1, x, y);
+    return cnt;
+}
+
+复杂度分析：
+时间复杂度：O(row*col)
+空间复杂度：O(row*col)
