@@ -1,0 +1,39 @@
+思路：
+利用广度优先搜索的方式遍历给定的树，设置一个栈，将当前节点的左右孩子节点，除去自身节点数字和经过的路径节点数目入栈，将合适的组合入栈。
+代码：
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} sum
+ * @return {number[][]}
+ */
+var pathSum = function(root, sum) {
+   if(!root){
+       return [];
+   }
+   let results = [];
+   const s =[[root,sum,[root.val]]];
+   while(s.length !== 0){
+       const [node,num,path] = s.pop();
+       if(!node.left && !node.right && num === node.val){
+           results.push(path);
+       }
+       if(node.left){
+           s.push([node.left,num-node.val,[...path,node.left.val]]);
+       }
+       if(node.right){
+           s.push([node.right,num-node.val,[...path,node.right.val]]);
+       }
+   }
+   return results;
+};
+复杂度分析：
+时间复杂度：其中n是树的节点数。在最坏情况下，树的上半部分为链状，下半部分为完全二叉树，并且从根节点到每一个叶子节点的路径都符合题目要求。
+此时，路径的数目为 O(N)，并且每一条路径的节点个数也为 O(N)，因此要将这些路径全部添加进答案中，时间复杂度为 O(N^2)。
+空间复杂度：O(n) //给定数组元素的个数
