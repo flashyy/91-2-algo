@@ -1,0 +1,47 @@
+思路：
+回溯
+代码：
+```
+class Solution {
+public:
+    int maxScoreWords(vector<string>& words, vector<char>& letters, vector<int>& score) {
+          vector<int> m(26);	
+    // 初始化字母表
+    for (char c : letters) {
+        m[c-'a']++;
+    }
+    return backtrack(0, m, words, letters, score);
+    }
+    
+    int backtrack(int index, vector<int> m, vector<string>& words, vector<char>& letters, vector<int>& score) {
+    if (index >= words.size()) {
+        return 0;
+    }
+    //生成一个字母表的副本t
+    vector<int> t(m);
+    //获得选择当前单词的得分ret
+    int ret = spell(words[index], t, letters, score);
+    //注意这里传入的字母表是被spell函数改变后的表t
+    int leftret = ret == 0 ? 0 : ret + backtrack(index+1, t, words, letters, score);
+    //这里传入的字母表是没有被改变的m
+    int rightret = backtrack(index+1, m, words, letters, score);
+    //返回选择或者不选得分较大者
+    return max(leftret, rightret);
+}
+
+int spell(string word, vector<int>& t, vector<char>& letters, vector<int>& score) {
+    int ret = 0;
+    for (char c : word) {
+        if (t[c-'a'] == 0) {
+            return 0;
+        }
+        ret += score[c-'a'];
+        t[c-'a']--;
+    }
+    return ret;
+}
+};
+```
+复杂度分析：
+时间复杂度：O(n!)
+空间复杂度：O(n)
