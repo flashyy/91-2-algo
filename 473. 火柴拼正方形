@@ -1,0 +1,76 @@
+还记得童话《卖火柴的小女孩》吗？现在，你知道小女孩有多少根火柴，请找出一种能使用所有火柴拼成一个正方形的方法。不能折断火柴，可以把火柴连接起来，并且每根火柴都要用到。
+
+输入为小女孩拥有火柴的数目，每根火柴用其长度表示。输出即为是否能用所有的火柴拼成正方形。
+
+示例 1:
+
+输入: [1,1,2,2,2]
+输出: true
+
+解释: 能拼成一个边长为2的正方形，每边两根火柴。
+示例 2:
+
+输入: [3,3,3,3,4]
+输出: false
+
+解释: 不能用所有火柴拼成一个正方形。
+注意:
+
+给定的火柴长度和在 0 到 10^9之间。
+火柴数组的长度不超过15。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/matchsticks-to-square
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+
+思路：想象正方形的4条边即为4个桶，将每个火柴杆回溯的放置在每个桶中，在放完n个火柴杆后，检查4个桶中的火柴杆的长度是否相同，相同返回true,否则返回false;
+在回溯中，如果当前所有可能向后的回溯都无法满足条件，即递归函数最终返回false。
+优化思路：
+1.n个火柴杆的总和对4取余需要为0，否则返回false。
+2.在进行搜索之前，我们可以将火柴的长度从大到小进行排序，方便我们先搜索较长的火柴。
+这样做的目的是对搜索进行剪枝，例如当火柴的长度为 [4,4,4,8] 时，每条边的长度为 5，如果我们先搜索长度为 8 的火柴，就可以发现它无法被放在任意一组中，因此直接退出搜索返回 False。
+3.每次放置时，每条边上不可放置超过总和的1/4长度的火柴杆。
+
+作者：LeetCode
+链接：https://leetcode-cn.com/problems/matchsticks-to-square/solution/huo-chai-pin-zheng-fang-xing-by-leetcode/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+代码：
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var makesquare = function(nums) {
+   if(nums.length <4){
+       return false;
+   }
+   let sum = nums.reduce((preVal,curval)=>(preVal+curval),0);
+   if(sum%4){
+       return false;
+   }
+   nums.sort((a,b)=>(b-a));
+   //console.log(nums);
+   let buckets = [0,0,0,0];
+   return backtrack(0,parseInt(sum/4),nums,buckets);
+};
+function backtrack(i,target,nums,buckets){
+    if(i>=nums.length){
+        return target === buckets[0]&&target === buckets[1]&&target === buckets[2]&&target === buckets[3];
+    }
+    for(let j=0;j<4;j++){
+        if(buckets[j]+nums[i]>target){
+            continue;
+        }
+        buckets[j] += nums[i];
+        if(backtrack(i+1,target,nums,buckets)){
+            return true;
+        }
+        buckets[j] -= nums[i];
+    }
+    return false;
+}
+
+复杂度分析：
+时间复杂度：O(4^n)
+空间复杂度：O(n)
