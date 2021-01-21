@@ -1,0 +1,37 @@
+思路：
+状态转换方程是dp[i][j] = dp[i-1][j-nums[i]]+dp[i-1][j+nums[i]];同时还要注意负数的情况。
+代码：
+/**
+ * @param {number[]} nums
+ * @param {number} S
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, S) {
+     let sum = nums.reduce((preval,curval)=>(preval+curval),0);
+     //console.log(sum);
+      if (Math.abs(S) > Math.abs(sum)) 
+          return 0;
+     let len = nums.length;
+     let t = sum*2+1;
+//console.log(t);
+     let dp = new Array(len).fill(0).map(()=>(new Array(t).fill(0)));
+  //   console.log(dp);
+     if(nums[0] === 0){
+         dp[0][sum] = 2;
+     }
+     else{
+        dp[0][sum-nums[0]] = 1;
+        dp[0][sum+nums[0]] = 1;
+     }
+      for(let i=1;i<len;i++){
+          for(let j=0;j<t;j++){
+             let left = j-nums[i] >=0?j-nums[i]:0;
+             let right = j+nums[i] <t?j+nums[i]:0;
+             dp[i][j] = dp[i-1][left] + dp[i-1][right];
+          }
+      }
+      return dp[len-1][sum+S];
+};
+复杂度分析：
+时间复杂度：O(n*sum)
+空间复杂度：O(n*sum)
