@@ -1,0 +1,20 @@
+思路：
+本来应该建立一个二维数组，记录每个结果，但是利用滚动数组的方式可以减少时间复杂度。
+代码：
+var coinChange = function(coins, amount) {
+   const dp = new Array(amount+1).fill(amount+1);
+   dp[0] = 0;
+   for(let coin of coins){
+       for(let j=coin;j<=amount;j++){
+           dp[j] = Math.min(dp[j],dp[j-coin]+1);
+       }
+   }
+       if (dp[amount] === amount + 1) {
+            dp[amount] = -1;
+        }
+   return dp[amount];
+};
+
+复杂度分析：
+时间复杂度：O(amount*n)
+空间复杂度：O(amount)//创建的数组长度
