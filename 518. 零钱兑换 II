@@ -1,0 +1,20 @@
+
+思路：
+设置dp数组，初始化所有的值为0，将dp[0]设置为1。遍历所有的面值，对于每个金额结果都遍历一次，dp[i]+=dp[i-coin],最后返回dp[amount]。
+代码：
+var change = function(amount, coins) {
+   const dp = new Array(amount+1).fill(0);
+   dp[0]=1;
+   for(let i=0;i<coins.length;i++){
+       for(let j=1;j<=amount;j++){
+           if(j-coins[i]>=0){
+                dp[j] +=dp[j-coins[i]];
+           }
+       }
+       console.log(dp);
+   }
+   return dp[amount];
+};
+复杂度分析：
+时间复杂度：O(n*amount)
+空间复杂度：O(amount)
