@@ -1,0 +1,29 @@
+思路:
+若从右下向左上递归,dp[i][j]代表了到达右下角，至少有多少血量，能在行走过程中至少保持生命值为1。
+dp[i][j]=dp_min(dp[i+1][j],dp[i][j+1])
+dp[i][j]= max(dp_min-dungeon[i][j],1);
+代码：
+var calculateMinimumHP = function(dungeon) {
+    if(dungeon.length === 0){
+        return 0;
+    }
+    let rows=dungeon.length,cols=dungeon[0].length;
+    let dp = new Array(rows).fill(0).map(()=>(new Array(cols).fill(0)));
+    dp[rows-1][cols-1] = Math.max(1,1-dungeon[rows-1][cols-1]);
+    for(let i=rows-2;i>=0;i--){
+        dp[i][cols-1] = Math.max(1,dp[i+1][cols-1]-dungeon[i][cols-1]);
+    }
+    for(let i=cols-2;i>=0;i--){
+        dp[rows-1][i] = Math.max(1,dp[rows-1][i+1]-dungeon[rows-1][i]);
+    }
+    for(let i=rows-2;i>=0;i--){
+        for(let j=cols-2;j>=0;j--){
+            let dp_min = Math.min(dp[i+1][j],dp[i][j+1]);
+            dp[i][j] = Math.max(1,dp_min-dungeon[i][j]);
+        }
+    }
+    return dp[0][0];
+};
+复杂度分析：
+时间复杂度：O(n*m)//给定数组的长宽
+空间复杂度：O(n*m)
