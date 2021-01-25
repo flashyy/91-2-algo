@@ -1,0 +1,18 @@
+思路：
+排序,如果一个糖果可以满足多个孩子，那就用这个糖果满足需求最大的那个孩子，如果一个孩子可以被多个糖果满足，那么用这些糖果里最小的满足这个孩子。
+代码：
+var findContentChildren = function(g, s) {
+    g=g.sort((a,b)=>(a-b));
+    s=s.sort((a,b)=>(a-b));
+    let cookies = 0,childs=0;
+    while(cookies<s.length&&childs<g.length){
+        if(g[childs]<=s[cookies]){
+            childs++;
+        }
+        cookies++;
+    }
+    return childs;
+};
+复杂度分析:
+时间复杂度:O(min(g.length,s.length))
+空间复杂度：O(1)
