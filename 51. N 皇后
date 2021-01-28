@@ -6,24 +6,20 @@
  * @return {string[][]}
  */
 var solveNQueens = function(n) {
-    let mark = new Array(n).fill(0).map(()=>{return new Array(n).fill(0)} );
+    let mark = new Array(n).fill(0).map(()=>{return new Array(n).fill(0)});
     let location = new Array(n).fill(".").map(()=>{return new Array(n).fill(".")});
     let result = [];
-    console.log(mark);
-    console.log(mark[0][n]);
-    //console.log(location);
     backtrack(0,n,location,mark,result);
     return result;
-
 function backtrack(k,n,location,mark,result){
-    console.log(mark[k][n]);
     if(k===n){
-        result.push(location);
+        console.log(location);
+        result.push(reSetRes(location));
+        return;
     }
     for(let i=0;i<n;i++){
         if(mark[k][i] === 0){
-            temp_mark = [...mark];
-            console.log(temp_mark);
+            let temp_mark = lastMark(mark);
             location[k][i] = "Q";
             putDowntheQueen(k,i,mark);
             backtrack(k+1,n,location,mark,result);
@@ -32,16 +28,29 @@ function backtrack(k,n,location,mark,result){
         }
     }
 }
+function reSetRes(location){
+    return location.map((item)=>([...item].join("")));
+}
+function lastMark(mark){
+    let n= mark.length;
+    let last = new Array(n).fill(0).map(()=>(new Array(n).fill(0)));
+    for(let i=0;i<n;i++){
+        for(let j=0;j<n;j++){
+            last[i][j]=mark[i][j];
+        }
+    }
+    return last;
+}
 function putDowntheQueen(x,y,mark){
    let dx = [-1,1,0,0,-1,-1,1,1];
    let dy = [0,0,-1,1,-1,1,-1,1];
    mark[x][y] = 1;
    for(let i=1;i<mark.length;i++){
        for(let j=0;j<8;j++){
-           let new_x = x+dx[i];
-           let new_y = y+dy[j];
-           if(new_y>=0&&new_x<mark.length && new_y>=0&&new_y<mark.length){
-               mark[x][y] = 1;
+           let new_x = x+i*dx[j];
+           let new_y = y+i*dy[j];
+           if(new_x>=0&&new_x<mark.length && new_y>=0&&new_y<mark.length){
+               mark[new_x][new_y] = 1;
            }
        }
    }
