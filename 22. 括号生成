@@ -1,0 +1,28 @@
+思路：
+递归有限制条件
+1.左括号和右括号的数量，最多可以放置n个
+2.若左括号的数量<=右括号数量，就不可以进行左括号的放置。
+代码：
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
+    let result = [];
+    backtrack("",0,0,result); 
+    function backtrack(str,left,right,result){
+         if(left === n && right === n){//当两种括号的数量一致
+             result.push(str);
+         }
+         if(left<n){//剪枝：左括号的数量小于n，递归调用加入"("的字符串
+              backtrack(str+"(",left+1,right,result);
+         }
+         if(right<left){//右括号的数量小于左括号，才递归调用加入")"的字符串
+             backtrack(str+")",left,right+1,result);
+         }
+    }
+    return result;
+};
+复杂度分析：
+时间复杂度：O(4^n/n的平方)
+空间复杂度：O(n)
