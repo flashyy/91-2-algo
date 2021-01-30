@@ -1,0 +1,26 @@
+思路：
+对数组里面的数求异或，因为一个数与自身的异或是0,所以最后的结果就是其中两个不同数字与0求异或的结果bitmask。
+将这个结果与自身求与，将会得到最右边的1并且将这个1的左侧全部清零。
+将这个值与数组中的每个数求如果结果是0的话就证明了数组的该数字是两个单一数字中的一个x。
+再将其和bitmask异或的结果就是另一个单一数字y。x^y=bitmask。
+
+代码：
+var singleNumber = function(nums) {
+    let bitMask = 0;
+    for(let num of nums){
+        bitMask ^= num;
+    }
+    console.log(-bitMask);
+    let difference = bitMask &(-bitMask);
+    console.log(difference);
+    let x =0;
+    for(let num of nums){
+        if((num&difference) !== 0){
+            x^=num;
+        }
+    }
+    return [x,x^bitMask];
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
