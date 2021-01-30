@@ -1,0 +1,17 @@
+思路：
+前序遍历
+设置出口：根节点为空或左孩子等于传入节点或右孩子等于传入节点就返回根节点。
+递归寻找传入的pq两个节点。
+看是否存在左节点，如果不存在就返回右节点，如果存在就判断右节点是否存在，如果不存在就返回左节点，存在的话就证明左右结点都存在，那就返回结根节点。
+代码：
+var lowestCommonAncestor = function(root, p, q) {
+    if(!root || root === p|| root===q){
+        return root;
+    }
+    let left = lowestCommonAncestor(root.left,p,q);
+    let right = lowestCommonAncestor(root.right,p,q);
+    return !left?right:!right?left :root;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(n)
