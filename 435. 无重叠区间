@@ -1,0 +1,25 @@
+思路：
+利用贪心的方式。
+将每个区间根据右侧排序。
+将最左边的区间定为一个区间，第二个不和其重合的区间一定是右侧大于或者第一个区间的左侧，以推下去。就可以计算出多少这样的区间。
+
+代码：
+var eraseOverlapIntervals = function(intervals) {
+     if(intervals.length === 0){
+         return 0;
+     }
+     intervals.sort((a,b)=>(a[1]-b[1]));
+     let count = 1;
+//console.log(intervals);
+     let right = intervals[0][1];
+     for(let i=1;i<intervals.length;i++){
+         if(intervals[i][0] >= right){
+             count++;
+             right = intervals[i][1];
+         }
+     }
+     return intervals.length-count;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
