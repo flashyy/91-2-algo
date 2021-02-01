@@ -1,0 +1,23 @@
+思路：
+1.从第i个位置最远可以跳到第index[i]位置：根据以第i位置最远可以跳nums[i]步：index[i] = nums[i]+i;
+2.初始化：设置变量jump代表当前所处的位置。
+设置变量max_index代表从第0位置到第jump位置这个过程中最远可以到达的位置，初始化为index[0];
+3.利用jump扫描index数组，直到jump到达index数组尾部或者jump超过max_index,扫描过程中，更新max_index.
+4.若最终jump为数组长度，则返回true,否则返回false。
+
+
+代码：
+var canJump = function(nums) {
+    let max = 0;
+    for(let i=0;i<nums.length;i++){
+        if(max<i){
+            return false;
+        }
+        max = Math.max(max,i+nums[i]);
+      }
+    return max >= nums.length-1;//最大值最最小为数组长度
+  };
+    
+    复杂度分析：
+    时间复杂度：O(n)
+    空间复杂度：O(1)
