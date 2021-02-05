@@ -1,0 +1,46 @@
+思路：
+就是用递归的方式完成图的遍历，如果图中有换环的话证明课程安排是不合法的，无环证明合法。
+代码：
+/**
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
+ */
+var canFinish = function(numCourses, prerequisites) {
+     const graph = new Map();
+     const visit = new Array(numCourses).fill(-1);
+     for(let i=0;i<numCourses;i++){
+         graph.set(i,[]);
+     }
+     for(let i=0;i<prerequisites.length;i++){
+         let begin = prerequisites[i][1];
+         let end = prerequisites[i][0];
+         graph.get(begin).push(end);
+     }
+     for(let [key,value] of graph.entries()){
+         if(visit[key] === -1 && !dfs(key,graph,visit)){
+             return false;
+         }
+     }
+     graph.clear();
+     return true;
+};
+function dfs(i,graph,visit){
+    visit[i] = 0;
+    for(let node of graph.get(i)){
+        if(visit[node] === -1){
+            if(!dfs(node,graph,visit)){
+                return false;
+            }
+        }
+        else if(visit[node] === 0){
+            return false;
+        }
+    }
+    visit[i] = 1;
+    return true;
+}
+复杂度分析：
+时间复杂度: O(n+m)，其中 n为课程数，m 为先修课程的要求数。这其实就是对图进行深度优先搜索的时间复杂度。
+空间复杂度: O(n+m)。题目中是以列表形式给出的先修课程关系，为了对图进行深度优先搜索，我们需要存储成邻接表的形式，空间复杂度为 O(n+m)。
+在深度优先搜索的过程中，我们需要最多 O(n) 的栈空间（递归）进行深度优先搜索，因此总空间复杂度为 O(n+m)。
