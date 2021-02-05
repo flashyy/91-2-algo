@@ -1,0 +1,41 @@
+题目地址：https://leetcode-cn.com/problems/clone-graph/
+
+思路：图的BFS，和树的bfs的思路一致，不同的是树只有两个邻接点（左孩子和右孩子），但是图有很多邻接点。
+
+代码：
+/**
+ * // Definition for a Node.
+ * function Node(val, neighbors) {
+ *    this.val = val === undefined ? 0 : val;
+ *    this.neighbors = neighbors === undefined ? [] : neighbors;
+ * };
+ */
+
+/**
+ * @param {Node} node
+ * @return {Node}
+ */
+var cloneGraph = function(node) {
+    if(!node){
+        return node;
+    }
+    const visited = new Map();
+    visited.set(node,new Node(node.val,[]));
+    const queue = [];
+    queue.push(node);
+    while(queue.length !== 0){
+       let firstNode = queue.shift();
+       for(let neighbor of firstNode.neighbors){
+           if(!visited.has(neighbor)){
+               visited.set(neighbor,new Node(neighbor.val,[]));
+               queue.push(neighbor);
+           }
+           visited.get(firstNode).neighbors.push(visited.get(neighbor));
+       }
+    }
+    return visited.get(node);
+};
+
+复杂度分析：
+时间复杂度：O(N)，其中 N 表示节点数量。广度优先搜索遍历图的过程中每个节点只会被访问一次。
+空间复杂度：O(N)。哈希表使用 O(N)的空间。广度优先搜索中的队列在最坏情况下会达到 O(N) 的空间复杂度，因此总体空间复杂度为 O(N)。
