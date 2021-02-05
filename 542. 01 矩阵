@@ -1,0 +1,38 @@
+
+
+代码：
+/**
+ * @param {number[][]} matrix
+ * @return {number[][]}
+ */
+var updateMatrix = function(matrix) {
+    let m = matrix.length,n=matrix[0].length;
+    //let visited = new Array(m).fill(0).map(()=>(new Array(n).fill(0)));
+    const queue = [];
+    for(let i=0;i<m;i++){
+        for(let j=0;j<n;j++){
+            if(matrix[i][j] === 0){
+                //visited[i][j] = 1;
+                queue.push([i,j]);
+            }
+            else{
+               matrix[i][j] = -1;
+            }
+        }
+    }
+    const dx = [-1,1,0,0];
+    const dy = [0,0,-1,1];
+    while(queue.length !== 0){
+        let [x,y] = queue.shift();
+        for(let i=0;i<4;i++){
+            let newX = dx[i] + x;
+            let newY = dy[i] + y;
+            if(newX>=0&&newX<m&&newY>=0&&newY<n&&matrix[newX][newY]===-1){
+                matrix[newX][newY] = matrix[x][y]+1;
+                queue.push([newX,newY]);
+                //visited[i][j] = 1;
+            } 
+        }
+    }
+    return matrix;
+};
