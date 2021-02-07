@@ -1,0 +1,39 @@
+思路：
+分桶思想
+代码：
+/**
+ * @param {number[]} ages
+ * @return {number}
+ */
+var numFriendRequests = function(ages) {
+    let count = new Array(121).fill(0);
+    for(let age of ages){
+        count[age]++;
+    }
+    //console.log(count);
+    let result = 0;
+    for(let i=0;i<=120;i++){
+        let countA = count[i];
+        for(let j=0;j<=120;j++){
+            let countB = count[j];
+            if(i<j){
+                continue;
+            }
+            if(j<=i*0.5+7){
+                continue;
+            }
+            if(j>100&&i<100){
+                continue;
+            }
+            result += countA*countB;
+            if(i === j){
+                result -=countA;
+            }
+        }
+    }
+    return  result;
+};
+
+复杂度分析:
+时间复杂度：O(A^2 + N)，其中 N 是人数，A是年龄的种树。
+空间复杂度：O(A)
