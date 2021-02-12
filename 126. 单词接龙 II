@@ -1,0 +1,92 @@
+思路：
+图的BFS；
+1.将普通队列更换为队列，保存所有的搜索结点，即是在pop结点是不会丢弃队头元素，只是移动front指针。
+2.在队列节点中增加该结点的前驱结点在队列中的下标信息，可通过该下标去寻找队列中那个结点搜索到当前节点。
+代码：
+/**
+ * @param {string} beginWord
+ * @param {string} endWord
+ * @param {string[]} wordList
+ * @return {string[][]}
+ */
+var findLadders = function(beginWord, endWord, wordList) {
+    wordList.push(beginWord);
+    let words = new Set(wordList);
+    //console.log(words);
+    wordList = [];
+    for(let word of words.values()){
+         wordList.push(word);
+    }
+    let gragh = new Map();
+    for(let word of wordList){
+         gragh.set(word,[]);
+    }
+    for(let i=0;i<wordList.length;i++){
+        for(let j=i+1;j<wordList.length;j++){
+            if(isVaild(wordList[i],wordList[j])){
+                gragh.get(wordList[i]).push(wordList[j]);
+                gragh.get(wordList[j]).push(wordList[i]);
+            }
+        }
+    }
+    //console.log(gragh);
+    endWordPos = [];
+    const queue = [];
+    queue.push([beginWord,-1,1]);
+    const visit = new Map();
+    visit.set(beginWord,1);
+    let front = 0,minStep = 0;
+    while(queue.length !== front){
+        let [word,frontPos,step] = queue[front];
+        if(step>minStep && minStep !==0){
+             break;
+        }
+        if(word === endWord){
+             minStep = step;
+             endWordPos.push(front);             
+             //console.log(endWordPos);
+        }
+        let neighbors = gragh.get(word);
+        //console.log(neighbors);
+        for(let i=0;i<neighbors.length;i++){
+        //console.log(neighbors[i]);
+         if(!visit.has(neighbors[i])||visit.get(neighbors[i])===step+1){
+                 queue.push([neighbors[i],front,step+1]);
+                 visit.set(neighbors[i],step+1);
+          }
+         }
+         front++;
+    }
+    //console.log(endWordPos);
+    //console.log(queue);
+    const result = [];
+    for(let i=0;i<endWordPos.length;i++){
+        let pos = endWordPos[i];
+       // console.log(pos);
+        let path = [];
+        while(pos !== -1){
+           //console.log(queue[pos]);
+            let [word,front,step] = queue[pos];
+            //console.log(word);
+            path.push(word);
+            pos = front;
+        }
+        //console.log(path);
+        path.reverse();
+        result.push(path);
+    }
+    return result;
+};
+
+function isVaild(wordA,wordB){
+    let count = 0;
+    for(let i=0;i<wordA.length;i++){
+        if(wordA[i] !== wordB[i]){
+            count++;
+        }
+    }
+    return count === 1;
+}
+复杂度分析：
+时间复杂度：O(n^2)  
+空间复杂度：O(n^2)
