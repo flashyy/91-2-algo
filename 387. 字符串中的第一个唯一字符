@@ -1,0 +1,27 @@
+思路：这道题是一道哈希表的题目，将字符串中所有的字符统计之后，遍历字符串，将每个字符串在哈希表中查找个数，看哪个数组下标对应的字符个数未1。第一个出现个数一的为正确的。
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var firstUniqChar = function(s) {
+    const wordMap = new Map();
+    for(let word of s){
+        if(!wordMap.has(word)){
+            wordMap.set(word,1);            
+        }
+        else{//一定要有else，这两个条件关系是对立的
+             wordMap.set(word,wordMap.get(word)+1);
+        }
+    }
+    console.log(wordMap);
+    for(let i=0;i<s.length;i++){
+        if(wordMap.get(s[i])=== 1){
+            return i;
+        }
+    }
+    return -1;
+};
+
+复杂度分析：
+时间复杂度：O(n)//字符串的长度
+空间复杂度：O(n)
