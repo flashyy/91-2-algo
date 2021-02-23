@@ -1,0 +1,33 @@
+思路：
+是回溯的过程，是一个树形结构，深度为n同时最底层是10^n，所以对这个树形结构减枝，深度必须超过1，同时第一层中不可以对0进行处理，同时要保证测试用例的深度大于1；
+对已经使用过的数字进行标记，在此基础上进行下一层的回溯处理吗，将这一层的结果添加上，并返回上一层，将已经使用过的数字标为未使用。
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var countNumbersWithUniqueDigits = function(n) {
+    let result = n===0?1:0;
+    let visited = new Array(10);
+    backtrack(0,n,visited);
+    return result;
+    function backtrack(i,n,visited){
+         if(i === n){
+             return;
+         }
+         for(let j=0;j<10;j++){
+             if(i===1 && j===0 && n>1){//剪枝：在层数大于1的情况之下，保证层数等于1时，不对0进行处理。
+                 continue;
+             }
+             if(visited[j] === 1){//发现上一层使用过就继续跳过这一次循环
+                 continue;
+             }
+             visited[j] = 1;
+             backtrack(i+1,n,visited);
+             result++;
+             visited[j] = 0;
+         }
+    }
+};
+复杂度分析：
+时间复杂度：O(10^n)
+空间复杂度：O(10)
