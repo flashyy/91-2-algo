@@ -1,0 +1,42 @@
+思路：回溯的方式。从字符串的每一个下标开始去截取一定长度的字符串，如果截取的字符串不是回文字符串，那么这次跳过这次循环，开始下一次循环；
+如果是回文字符串，就在截取截取过后的字符串长度再加上一位，对其后面的字符串进行回溯处理，最后回溯将加上的那一位字符串删掉。
+当开始截取位置的下标是数组长度的时候，说明这一次的分割完毕，将结果拷贝放回结果数组。
+
+/**
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function(s) {
+    let result = [];
+    let item = [];
+    backtrack(0,s,result,item);
+    return result;
+    function backtrack(i,s,result,item){
+        if(s.length === i){
+            result.push([...item]);
+            return;
+        }
+        for(let j=i;j<s.length;j++){
+            if(!isPalindrome(s,i,j)){
+                continue;
+            }
+            item.push(s.slice(i,j+1));
+            backtrack(j+1,s,result,item);
+            item.pop();
+        }
+    }
+};
+function isPalindrome(s,left,right){
+    while(left<right){
+        if(s[left] !== s[right]){
+            return false;
+        }
+        left++;
+        right--;
+    }
+    return true;
+}
+
+复杂度分析：
+时间复杂度：O(n!)
+空间复杂度：O(n)//字符串的长度
