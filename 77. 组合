@@ -1,0 +1,27 @@
+思路：这道题目和87题一致。利用回溯的算法来修正。
+代码：
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function(n, k) {
+    let result = [];
+    let item = [];
+    backtrack(1,item,result);
+    return result;
+    function backtrack(i,item,result){
+        if(k===item.length){
+            result.push([...item]);
+            return;
+        }
+        for(let j=i;j<=n;j++){
+            item.push(j);
+            backtrack(j+1,item,result);
+            item.pop();
+        }
+    }
+};
+复杂度分析：
+时间复杂度：O(n*2^n)
+空间复杂度：O(n)
