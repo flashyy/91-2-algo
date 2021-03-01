@@ -1,0 +1,27 @@
+思路：
+贪心算法，用hash表记录下来每个单词最后出现的下标，在循环字符串，将每位单词的下标从hash表中取出来，如果正好下标和循环位数相同，证明最长字符。
+代码：
+/**
+ * @param {string} S
+ * @return {number[]}
+ */
+var partitionLabels = function(S) {
+   let wordIndex = new Map();
+   for(let i=0;i<S.length;i++){
+       wordIndex.set(S[i],i);
+   }
+   //console.log(wordIndex);
+   let start = end = 0;
+   let partition = [];
+   for(let i=0;i<S.length;i++){
+       end = Math.max(end,wordIndex.get(S[i]));
+       if(end === i){
+           partition.push(end-start+1);
+           start=end+1;
+       }
+   }
+   return partition;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(y)//这个字符串中的去重的单词数量。
