@@ -1,0 +1,23 @@
+思路：
+当后面的时间节点和前一个时间节点之间的时间差大于duration的时候，说明中毒时间能完整的维持一个duration，如果这个时间差不满小于一个duration的时候，
+那么中毒的时间维持了两个节点之间的时间差，不足一个duration。
+代码：
+/**
+ * @param {number[]} timeSeries
+ * @param {number} duration
+ * @return {number}
+ */
+var findPoisonedDuration = function(timeSeries, duration) {
+   let n = timeSeries.length;
+   if(n===0){
+       return 0;
+   }
+   let result = 0;
+   for(let i=0;i<n-1;i++){
+        result += Math.min(timeSeries[i+1]-timeSeries[i],duration);
+   }
+   return result+duration;
+};
+复杂度分析：
+时间复杂度：O(n)
+空间复杂度：O(1)
