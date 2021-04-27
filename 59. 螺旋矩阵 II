@@ -1,0 +1,63 @@
+给你一个正整数 n ，生成一个包含 1 到 n2 所有元素，且元素按顺时针顺序螺旋排列的 n x n 正方形矩阵 matrix 。 
+
+示例 1：
+输入：n = 3
+输出：[[1,2,3],[8,9,4],[7,6,5]]
+示例 2：
+
+输入：n = 1
+输出：[[1]]
+ 
+
+提示：
+
+1 <= n <= 20
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/spiral-matrix-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+思路：
+首先left和top的初始值为0,right和buttom的值为n-1。
+1.变量i从left到right，保持top不变。循环完毕之后，top++
+2.变量i从top到buttom，保持right不变。循环完毕之后，right--
+3.变量i从right到left,保持buttom不变。循环完毕之后，buttom--
+4.变量i从buttom到top，保持left不变。循环完毕之后，left++.
+代码：
+/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+var generateMatrix = function(n) {
+ let count  = n*n;
+    let res = new Array(n).fill(0).map(()=>{
+        return new Array(n).fill(0);
+    });
+    //console.log(res);
+    let left = 0,right = n-1,top = 0,buttom = n-1;
+    let num = 1;
+    while(num <= count){
+        for(let i=left;i<=right;i++){
+            //console.log(res[top][i]);
+            res[top][i] = num++;
+        }
+        top++;
+        for(let i=top;i<=buttom;i++){
+            res[i][right] = num++;
+        }
+        right--;
+        for(let i=right;i>=left;i--){
+            res[buttom][i] = num++;
+        }
+        buttom--;
+        for(let i=buttom;i>=top;i--){
+             res[i][left] = num++;
+        }   
+        left++;
+    }
+    return res;
+};
+
+复杂度分析：
+时间复杂度：O(n*n)
+空间复杂度：O(1)
